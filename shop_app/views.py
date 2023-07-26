@@ -1,8 +1,9 @@
 from shop_app.models import Gender, Product, Category
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView, DetailView
+from django.urls import reverse
 
 
-class Home(ListView):
+class HomeListView(ListView):
     template_name = 'shop_app/home.html'
     queryset = Product.objects.all()
     context_object_name = 'products'
@@ -17,3 +18,19 @@ class Home(ListView):
         context['just_arrived'] = self.queryset.order_by('-updated_at')[:4]
 
         return context
+
+
+class ShopListView(ListView):
+    template_name = 'shop_app/shop.html'
+    model = Product
+    context_object_name = 'products'
+
+
+class ContactTemplateView(TemplateView):
+    template_name = 'shop_app/contact.html'
+
+
+class ProductDetailView(DetailView):
+    template_name = 'shop_app/product_detail.html'
+    model = Product
+

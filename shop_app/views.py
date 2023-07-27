@@ -1,22 +1,23 @@
+from django.shortcuts import get_object_or_404
 from shop_app.models import Gender, Product, Category
 from django.views.generic import ListView, TemplateView, DetailView
 from django.urls import reverse
+from django.db.models import Count
 
 
 class HomeListView(ListView):
     template_name = 'shop_app/home.html'
-    queryset = Product.objects.all()
+    model = Product
     context_object_name = 'products'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
-        genders = Gender.objects.all()
+        genders = Gender.objects.annotate(product_count=Count('product'))
         context['categories'] = categories
         context['genders'] = genders
-        context['products_count'] = self.queryset.count()
-        context['just_arrived'] = self.queryset.order_by('-updated_at')[:4]
-
+        context['products_count'] = self.model.objects.count()
+        context['just_arrived'] = self.model.objects.order_by('-updated_at')[:4]
         return context
 
 
@@ -26,11 +27,32 @@ class ShopListView(ListView):
     context_object_name = 'products'
 
 
-class ContactTemplateView(TemplateView):
-    template_name = 'shop_app/contact.html'
-
-
 class ProductDetailView(DetailView):
     template_name = 'shop_app/product_detail.html'
     model = Product
 
+
+class GenderListView(ListView):
+    template_name = 'shop_app/shop_by_gender.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        # Get the gender_slug from the URL
+        gender_slug = self.kwargs.get('gender_slug')
+        # Retrieve the Gender object based on the gender_slug
+        gender = get_object_or_404(Gender, slug=gender_slug)
+        # Return the products related to the selected gender
+        return Product.objects.filter(gender=gender)
+
+
+class CategoryListView(ListView):
+    template_name = 'shop_app/shop_by_category.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        category_slug = self.kwargs.get('category_slug')
+        category = get_object_or_404(Category, slug=category_slug)
+        return Product.objects.filter(category=category)
+
+class ContactTemplateView(TemplateView):
+    template_name = 'shop_app/contact.html'

@@ -53,7 +53,7 @@ class GenderListView(CategoryGenderMixin, ListView):
 
 class CategoryListView(CategoryGenderMixin, ListView):
     template_name = 'shop_app/shop_by_category.html'
-    context_object_name = 'categories'
+    context_object_name = 'products'
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')

@@ -14,6 +14,13 @@ class CategoryGenderMixin:
         context['genders'] = genders
         return context
 
+class ProductsMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = Product.objects.all()
+        context['products'] = products
+        return context
+
 
 class HomeListView(CategoryGenderMixin, ListView):
     template_name = 'shop_app/home.html'
@@ -33,9 +40,10 @@ class ShopListView(CategoryGenderMixin, ListView):
     context_object_name = 'products'
 
 
-class ProductDetailView(CategoryGenderMixin, DetailView):
+class ProductDetailView(ProductsMixin, CategoryGenderMixin, DetailView):
     template_name = 'shop_app/product_detail.html'
     model = Product
+    context_object_name = 'product'
 
 
 class GenderListView(CategoryGenderMixin, ListView):

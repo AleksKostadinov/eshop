@@ -1,8 +1,12 @@
 from django.shortcuts import get_object_or_404
+from shop_app.forms import ContactForm
 from shop_app.models import Gender, Product, Category
-from django.views.generic import ListView, TemplateView, DetailView
-from django.urls import reverse
+from django.views.generic import ListView, TemplateView, DetailView, FormView
+from django.urls import reverse, reverse_lazy
 from django.db.models import Count
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
 
 
 class ProductsMixin:
@@ -76,5 +80,37 @@ class CategoryGenderListView(CategoryGenderBaseView, ListView):
         return Product.objects.filter(category=category, gender=gender)
 
 
-class ContactTemplateView(CategoryGenderBaseView, TemplateView):
+# class ContactTemplateView(CategoryGenderBaseView, TemplateView):
+#     template_name = 'shop_app/contact.html'
+
+class ContactView(FormView):
+    form_class = ContactForm
     template_name = 'shop_app/contact.html'
+    success_url = reverse_lazy('shop_app:home')
+
+    def form_valid(self, form):
+        self.send_mail(form.cleaned_data)
+        return super(ContactView, self).form_valid(form)
+
+    def send_mail(self, valid_data):
+        name = valid_data['name']
+        email = valid_data['email']
+        subject = valid_data['subject']
+        message = valid_data['message']
+
+        # Create the email content
+        email_content = f"Name: {name}\nEmail: {email}\nSubject: {subject}\nMessage: {message}"
+
+        # Send the email
+        try:
+            send_mail(
+                subject="Contact Form Submission",
+                message=email_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.EMAIL_REDIRECT_TO],
+            )
+        except Exception as e:
+            # Handle email sending errors if needed
+            messages.error(self.request, f"Error sending email: {e}")
+        else:
+            messages.success(self.request, "Email sent successfully!")

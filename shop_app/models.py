@@ -58,4 +58,5 @@ class Product(models.Model):
         return discounted_price
 
 
-# To make variations(colors, sizes), reviews and ratings, add extra images
+# class Variation(models.Model):
+#     pass

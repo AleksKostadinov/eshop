@@ -12,6 +12,5 @@ urlpatterns = [
     path('shop/<slug:category_slug>/<slug:gender_slug>/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
     path('shop/<slug:category_slug>/<slug:gender_slug>/', CategoryGenderListView.as_view(), name='shop_by'),
     path('contact/', ContactView.as_view(), name='contact'),
-    # path('send_email/', views.send_email, name='send email'),
 ]
 

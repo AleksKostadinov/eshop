@@ -80,9 +80,6 @@ class CategoryGenderListView(CategoryGenderBaseView, ListView):
         return Product.objects.filter(category=category, gender=gender)
 
 
-# class ContactTemplateView(CategoryGenderBaseView, TemplateView):
-#     template_name = 'shop_app/contact.html'
-
 class ContactView(FormView):
     form_class = ContactForm
     template_name = 'shop_app/contact.html'

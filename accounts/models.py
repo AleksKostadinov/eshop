@@ -5,7 +5,7 @@ class Account(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True,)
-    phone_number = models.IntegerField(null=True)
+    phone_number = models.CharField(max_length=20, null=True)
 
     def full_name(self):
         return f'{self.first_name} {self.last_name}'

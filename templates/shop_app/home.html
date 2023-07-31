@@ -453,18 +453,18 @@
         </h2>
     </div>
     <div class="row px-xl-5 pb-3">
-        {% for arrived in just_arrived %}
+        {% for product in just_arrived %}
         <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div
                     class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
                 >
                     <a
-                        href="{% url 'shop_app:product_detail' gender_slug=arrived.gender.slug category_slug=arrived.category.slug slug=arrived.slug %}"
+                        href="{{ product.get_url }}"
                     >
                         <img
                             class="img-fluid w-100"
-                            src="{{ arrived.images.url }}"
+                            src="{{ product.images.url }}"
                             alt="just-arrived-photo"
                         />
                     </a>
@@ -473,13 +473,13 @@
                     class="card-body border-left border-right text-center p-0 pt-4 pb-3"
                 >
                     <h6 class="text-truncate mb-3">
-                        {{ arrived.product_name }}
+                        {{ product.product_name }}
                     </h6>
                     <div class="d-flex justify-content-center">
-                        <h6>${{ arrived.discounted_price }}</h6>
-                        {% if arrived.discount_percentage %}
+                        <h6>${{ product.discounted_price }}</h6>
+                        {% if product.discount_percentage %}
                         <h6 class="text-muted ml-2">
-                            <del>${{ arrived.price }}</del>
+                            <del>${{ product.price }}</del>
                         </h6>
                         {% endif %}
                     </div>
@@ -488,7 +488,7 @@
                     class="card-footer d-flex justify-content-between bg-light border"
                 >
                     <a
-                        href="{% url 'shop_app:product_detail' gender_slug=arrived.gender.slug category_slug=arrived.category.slug slug=arrived.slug %}"
+                        href="{{ product.get_url }}"
                         class="btn btn-sm text-dark p-0"
                     >
                         <i class="fas fa-eye text-primary mr-1"></i>View Detail

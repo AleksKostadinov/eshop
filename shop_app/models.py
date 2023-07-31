@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Gender(models.Model):
@@ -45,6 +46,10 @@ class Product(models.Model):
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_url(self):
+        return reverse('shop_app:product_detail', args=[self.gender.slug, self.category.slug, self.slug])
+
 
     class Meta:
         ordering = ['-updated_at']

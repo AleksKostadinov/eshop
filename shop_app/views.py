@@ -111,3 +111,16 @@ class ContactView(FormView):
             messages.error(self.request, f"Error sending email: {e}")
         else:
             messages.success(self.request, "Email sent successfully!")
+
+
+# ProductsMixin
+class ProductSearchView(ListView):
+    template_name = 'shop_app/shop_by.html'
+    model = Product
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Product.objects.filter(product_name__icontains=query)
+        return Product.objects.all()

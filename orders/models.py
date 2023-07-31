@@ -1,6 +1,11 @@
 from django.db import models
-
 from accounts.models import Account
+
+class ShippingConfig(models.Model):
+    shipping_cost_percent = models.FloatField()
+
+    def __str__(self):
+        return f'Shipping Percent: {self.shipping_cost_percent:.2f}'
 
 class Order(models.Model):
     STATUS = (
@@ -29,6 +34,7 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    shipping_cost_percent = models.FloatField()
 
 
     def full_name(self):

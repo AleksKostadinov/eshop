@@ -1,5 +1,5 @@
 from django.contrib import admin
-from orders.models import Order
+from orders.models import Order, ShippingConfig
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['order_number', 'full_name', 'phone', 'email', 'city', 'order_total', 'tax', 'status', 'is_ordered', 'created_at']
@@ -9,3 +9,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(ShippingConfig)

@@ -102,3 +102,13 @@
 
 })(jQuery);
 
+$(document).ready(function () {
+    $("#colorForm input, #sizeForm input").on("change", function () {
+        // Enable the "Add to Cart" button if both color and size are chosen
+        if ($("#colorForm input:checked").length > 0 && $("#sizeForm input:checked").length > 0) {
+            $("#addToCartBtn").prop("disabled", false);
+        } else {
+            $("#addToCartBtn").prop("disabled", true);
+        }
+    });
+});

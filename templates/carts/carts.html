@@ -38,7 +38,7 @@
                     {% for cart_item in cart_items %}
                     <tbody class="align-middle">
                         <tr>
-                            <td class="align-middle"><img src="{{ cart_item.product.images.url }}" alt="" style="width: 50px;">{{ cart_item.product.product_name }}</td>
+                            <td class="align-middle"><img src="{{ cart_item.product.images.url }}" alt="" style="width: 50px;"><a href="{{ cart_item.product.get_url }}">{{cart_item.product.product_name }}</a></td>
                             <td class="align-middle">${{ cart_item.product.discounted_price }}</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">

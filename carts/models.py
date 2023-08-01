@@ -4,7 +4,7 @@ from accounts.models import Account
 from shop_app.models import Product, Variation
 
 class Cart(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     purchased = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 

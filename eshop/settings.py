@@ -18,6 +18,8 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
+handler404 = 'shop_app.views.custom_404'
+
 
 # Application definition
 

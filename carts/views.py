@@ -4,11 +4,12 @@ from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from orders.models import Order, ShippingConfig
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from shop_app.models import Product
+from shop_app.models import Product, Variation
 from .models import Cart, CartItem
 
-class CartView(View):
+class CartView(LoginRequiredMixin, View):
     template_name = 'carts/carts.html'
 
     def get_cart(self, request):
@@ -38,33 +39,47 @@ class CartView(View):
         return shipping_cost, total_sum
 
     def get(self, request, *args, **kwargs):
-        # Get the cart for the current user
-        cart = self.get_cart(request)
 
-        # Get cart items for the cart
-        cart_items = self.get_cart_items(cart)
-
-        # Fetch the shipping cost percentage from the Order model
         try:
-            order = Order.objects.get(user=request.user, is_ordered=False)
-            shipping_cost_percent = order.shipping_cost_percent
-        except Order.DoesNotExist:
-            shipping_cost_percent = 0
+            # Check if the user is authenticated
+            if request.user.is_authenticated:
+                user_id = request.user.id
+            else:
+                # If the user is not authenticated, set the user_id to None or any default value
+                user_id = None
 
-        sum_wo_shipping = self.sum_wo_shipping(cart_items)
+            # Get the cart for the current user
+            cart = self.get_cart(request)
 
-        # Calculate the total sum of all cart items
-        shipping_cost, total_sum = self.get_total_sum(cart_items)
+            # Get cart items for the cart
+            cart_items = self.get_cart_items(cart)
 
-        context = {
-            'cart': cart,
-            'cart_items': cart_items,
-            'sum_wo_shipping': sum_wo_shipping,
-            'shipping_cost': shipping_cost,
-            'total_sum': total_sum,
-        }
+            # Fetch the shipping cost percentage from the Order model
+            try:
+                order = Order.objects.get(user=request.user, is_ordered=False)
+                shipping_cost_percent = order.shipping_cost_percent
+            except Order.DoesNotExist:
+                shipping_cost_percent = 0
 
-        return render(request, self.template_name, context)
+            sum_wo_shipping = self.sum_wo_shipping(cart_items)
+
+            # Calculate the total sum of all cart items
+            shipping_cost, total_sum = self.get_total_sum(cart_items)
+
+            context = {
+                'cart': cart,
+                'cart_items': cart_items,
+                'sum_wo_shipping': sum_wo_shipping,
+                'shipping_cost': shipping_cost,
+                'total_sum': total_sum,
+            }
+
+            return render(request, self.template_name, context)
+
+        except Exception as e:
+                # Handle any other exceptions or errors here
+                # For example, you can render a custom 500 error page
+                return render(request, '500.html', status=500)
 
 
 class AddToCartView(View):

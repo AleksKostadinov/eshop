@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from shop_app.forms import ContactForm
 from shop_app.models import Gender, Product, Category
 from django.views.generic import ListView, TemplateView, DetailView, FormView
@@ -7,6 +7,10 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
 
 
 class ProductsMixin:

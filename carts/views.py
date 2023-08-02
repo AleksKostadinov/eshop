@@ -1,7 +1,6 @@
 from decimal import Decimal
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from orders.models import Order, ShippingConfig
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,17 +8,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from shop_app.models import Product, Variation
 from .models import Cart, CartItem
 
-class CartView(LoginRequiredMixin, View):
-    template_name = 'carts/carts.html'
-
+class BaseCartView(LoginRequiredMixin, View):
     def get_cart(self, request):
-        # Get or create the cart for the current user
-        cart, created = Cart.objects.get_or_create(user=request.user, purchased=False)
+        # Check if the user is authenticated
+        if request.user.is_authenticated:
+            # Get or create the cart for the current user
+            cart, created = Cart.objects.get_or_create(user=request.user, purchased=False)
+        else:
+            # If the user is not authenticated, set the user_id to None or any default value
+            cart = None
         return cart
 
     def get_cart_items(self, cart):
-        # Retrieve cart items associated with the given cart
-        cart_items = CartItem.objects.filter(cart=cart)
+        # Check if cart is not None (for unauthenticated users, cart will be None)
+        if cart:
+            # Retrieve cart items associated with the given cart
+            cart_items = CartItem.objects.filter(cart=cart).order_by('-id')
+        else:
+            # If cart is None (for unauthenticated users), return an empty queryset
+            cart_items = CartItem.objects.none()
         return cart_items
 
     def sum_wo_shipping(self, cart_items):
@@ -38,16 +45,12 @@ class CartView(LoginRequiredMixin, View):
         total_sum = shipping_cost + self.sum_wo_shipping(cart_items)
         return shipping_cost, total_sum
 
+
+class CartView(BaseCartView):
+    template_name = 'carts/carts.html'
+
     def get(self, request, *args, **kwargs):
-
         try:
-            # Check if the user is authenticated
-            if request.user.is_authenticated:
-                user_id = request.user.id
-            else:
-                # If the user is not authenticated, set the user_id to None or any default value
-                user_id = None
-
             # Get the cart for the current user
             cart = self.get_cart(request)
 
@@ -77,25 +80,66 @@ class CartView(LoginRequiredMixin, View):
             return render(request, self.template_name, context)
 
         except Exception as e:
-                # Handle any other exceptions or errors here
-                # For example, you can render a custom 500 error page
-                return render(request, '500.html', status=500)
+            # Handle any other exceptions or errors here
+            # For example, you can render a custom 500 error page
+            return render(request, '500.html', status=500)
 
+# def _cart_id(request):
+#     cart = request.session.session_key
+#     if not cart:
+#         cart = request.session.create()
+#     return cart
 
-class AddToCartView(View):
+class AddToCartView(BaseCartView):
+    login_url = '/accounts/login/'
+
     def post(self, request, product_id):
-        # Get the selected product
+        cart = self.get_cart(request)
         product = get_object_or_404(Product, id=product_id)
 
-        # Check if the user has an active cart
-        cart, created = Cart.objects.get_or_create(user=request.user, purchased=False)
+        product_variation = []
+        variation_info = []
 
-        # Add the product to the cart
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        cart_item.quantity += 1
-        cart_item.save()
+        for item in request.POST:
+            key = item
+            value = request.POST[key]
 
-        # Show success message after adding the product to the cart
-        messages.success(request, f"{product.product_name} has been added.")
+            try:
+                variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                product_variation.append(variation)
+                variation_info.append(f"{variation.variation_category.capitalize()}: {variation.variation_value}")
+            except Variation.DoesNotExist:
+                pass
+
+        if cart is None:
+            # Create a new cart for the user if it doesn't exist
+            cart = Cart.objects.create(user=request.user)
+
+        # Find matching cart items with the same product ID and size
+        matching_cart_items = CartItem.objects.filter(
+            cart=cart,
+            product=product,
+            is_active=True,
+            variations__in=product_variation
+        )
+
+        if matching_cart_items.exists():
+            # If a matching cart item exists, increase its quantity
+            cart_item = matching_cart_items.first()
+            cart_item.quantity += 1
+            cart_item.save()
+        else:
+            # If no matching cart item is found, create a new cart item for the product with the selected variations
+            cart_item = CartItem.objects.create(cart=cart, product=product, quantity=1)
+            cart_item.variations.add(*product_variation)
+
+        # Construct the success message with product name and variation information
+        message = f"Product: {product.product_name} , "
+        if variation_info:
+            message += ", ".join(variation_info)
+
+        # Show the success message
+        message += " has been added to your cart."
+        messages.success(request, message)
 
         return redirect('carts:carts')

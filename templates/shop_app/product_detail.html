@@ -58,69 +58,70 @@
                 </h3>
                 <p class="mb-4">{{ product.description }}</p>
 
-                <div class="d-flex mb-3">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                    <form id="colorForm">
-                        {% for i in product.variation_set.colors %}
+                <form method="post" action="{% url 'carts:add_to_cart' product_id=product.id %}">
+                    {% csrf_token %}
+                    <div class="d-flex mb-3">
+                        <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
+                            {% for i in product.variation_set.colors %}
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="color-{{ forloop.counter }}" name="color" value="{{ i.variation_value | lower }}" required>
                                 <label class="custom-control-label" for="color-{{ forloop.counter }}">{{ i.variation_value | capfirst }}</label>
                             </div>
-                        {% endfor %}
-                    </form>
-                </div>
-
-                <div class="d-flex mb-4">
-                    <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                    <form id="sizeForm">
-                        {% for i in product.variation_set.sizes %}
+                            {% endfor %}
+                    </div>
+                    <div class="d-flex mb-4">
+                        <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
+                            {% for i in product.variation_set.sizes %}
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="size-{{ forloop.counter }}" name="size" value="{{ i.variation_value | lower }}" required>
                                 <label class="custom-control-label" for="size-{{ forloop.counter }}">{{ i.variation_value | capfirst }}</label>
                             </div>
-                        {% endfor %}
-                    </form>
-                </div>
+                            {% endfor %}
+                    </div>
+                    <div class="d-flex align-items-center mb-4 pt-2">
+                        <div class="input-group quantity mr-3" style="width: 130px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-minus" >
+                                <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control bg-secondary text-center" value="1">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-plus">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus" >
-                            <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                    {% if product.stock <= 0 %}
+                        <h5 class="text-danger">Out of Stock</h5>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            <button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i> </button>
+                        {% else %}
+                            <a href="{% url 'accounts:login' %}" class="nav-item nav-link"><i class="fas fa-sign-in-alt"> Login</i></a>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="d-flex pt-2">
+                        <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
+                        <div class="d-inline-flex">
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
                         </div>
                     </div>
-                    <form method="post" action="{% url 'carts:add_to_cart' product_id=product.id %}">
-                        {% csrf_token %}
-                        <!-- Add "id" attribute to the button -->
-                        <button type="submit" id="addToCartBtn" class="btn btn-primary px-3" disabled>
-                            <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
-                        </button>
-                    </form>
-                </div>
-                <div class="d-flex pt-2">
-                    <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
-                    <div class="d-inline-flex">
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-pinterest"></i>
-                        </a>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <div class="row px-xl-5">

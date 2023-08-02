@@ -19,6 +19,14 @@
 
     {% include 'base/alerts.html' %}
 
+    {% if not cart_items %}
+        <h2 class="text-center">Your Shopping Cart is Empty</h2>
+        <br>
+        <div class="text-center">
+            <a href="{% url 'shop_app:shop' %}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    {% else %}
+
 
     <!-- Cart Start -->
     <div class="container-fluid pt-5">
@@ -38,7 +46,21 @@
                     {% for cart_item in cart_items %}
                     <tbody class="align-middle">
                         <tr>
-                            <td class="align-middle"><img src="{{ cart_item.product.images.url }}" alt="" style="width: 50px;"><a href="{{ cart_item.product.get_url }}">{{cart_item.product.product_name }}</a></td>
+                            <td>
+                                <figure class="itemside align-items-center">
+                                    <div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
+                                    <figcaption class="info">
+                                        <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
+                                        <p class="text-muted small">
+                                            {% if cart_item.variations.all %}
+                                                {% for item in cart_item.variations.all %}
+                                                    {{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </p>
+                                    </figcaption>
+                                </figure>
+                            </td>
                             <td class="align-middle">${{ cart_item.product.discounted_price }}</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -98,5 +120,5 @@
     </div>
     <!-- Cart End -->
 
-
+    {% endif %}
 {% endblock content %}

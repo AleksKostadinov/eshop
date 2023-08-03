@@ -90,6 +90,15 @@ class CartView(BaseCartView):
 #         cart = request.session.create()
 #     return cart
 
+def message_added_product(request, product, variation_info):
+    message = f"Product: {product.product_name} , "
+
+    message += ", ".join(variation_info)
+
+        # Show the success message
+    message += " has been added to your cart."
+    messages.success(request, message)
+
 class AddToCartView(BaseCartView):
     login_url = '/accounts/login/'
 
@@ -97,16 +106,15 @@ class AddToCartView(BaseCartView):
         cart = self.get_cart(request)
         product = get_object_or_404(Product, id=product_id)
 
-        product_variation = []
+        product_variations = []
         variation_info = []
-
         for item in request.POST:
             key = item
             value = request.POST[key]
 
             try:
                 variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
-                product_variation.append(variation)
+                product_variations.append(variation)
                 variation_info.append(f"{variation.variation_category.capitalize()}: {variation.variation_value}")
             except Variation.DoesNotExist:
                 pass
@@ -115,31 +123,34 @@ class AddToCartView(BaseCartView):
             # Create a new cart for the user if it doesn't exist
             cart = Cart.objects.create(user=request.user)
 
-        # Find matching cart items with the same product ID and size
+        # Find cart items with the same product and same size
         matching_cart_items = CartItem.objects.filter(
             cart=cart,
             product=product,
             is_active=True,
-            variations__in=product_variation
-        )
+            variations__variation_category='size',  # Filter by size variation
+            variations__in=product_variations,
+        ).distinct()
 
-        if matching_cart_items.exists():
-            # If a matching cart item exists, increase its quantity
-            cart_item = matching_cart_items.first()
-            cart_item.quantity += 1
-            cart_item.save()
-        else:
-            # If no matching cart item is found, create a new cart item for the product with the selected variations
-            cart_item = CartItem.objects.create(cart=cart, product=product, quantity=1)
-            cart_item.variations.add(*product_variation)
+        for matching_cart_item in matching_cart_items:
+            # Check if the matching cart item has the same color variation
+            matching_color_variations = matching_cart_item.variations.filter(
+                variation_category='color',  # Filter by color variation
+                variation_value__in=[v.variation_value for v in product_variations if v.variation_category == 'color']
+            )
+            if matching_color_variations.count() == len(product_variations) - 1:
+                # If all color variations match, increase the quantity
+                matching_cart_item.quantity += 1
+                matching_cart_item.save()
+                message_added_product(request, product, variation_info)
+
+                return redirect('carts:carts')
+
+        # If no matching cart item is found, create a new cart item for the product with the selected variations
+        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=1)
+        cart_item.variations.add(*product_variations)
 
         # Construct the success message with product name and variation information
-        message = f"Product: {product.product_name} , "
-        if variation_info:
-            message += ", ".join(variation_info)
-
-        # Show the success message
-        message += " has been added to your cart."
-        messages.success(request, message)
-
+        message_added_product(request, product, variation_info)
+        
         return redirect('carts:carts')

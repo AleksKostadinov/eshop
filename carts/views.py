@@ -152,5 +152,5 @@ class AddToCartView(BaseCartView):
 
         # Construct the success message with product name and variation information
         message_added_product(request, product, variation_info)
-        
+
         return redirect('carts:carts')

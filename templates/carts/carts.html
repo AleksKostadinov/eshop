@@ -63,22 +63,22 @@
                             </td>
                             <td class="align-middle">${{ cart_item.product.discounted_price }}</td>
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group quantity mx-auto" style="width: 90px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
+                                        <i class="fa fa-minus fa-xs"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="{{ cart_item.quantity }}">
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="{{ cart_item.quantity }}" readonly>
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
+                                            <i class="fa fa-plus fa-xs"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle">${{ cart_item.sub_total }}</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times fa-xs"></i></button></td>
                         </tr>
                     </tbody>
                     {% endfor %}

@@ -1,12 +1,25 @@
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.contrib.auth import login, authenticate
 
+from accounts.forms import RegisterForm
+from django.shortcuts import render
+
 
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
+
+
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy('shop_app:home')
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+
+        return response
 
 
 class CustomRegisterView(FormView):
@@ -23,3 +36,8 @@ class CustomRegisterView(FormView):
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super().form_valid(form)
+
+
+def register(request):
+    form = RegisterForm()
+    return render(request, 'accounts/register.html', {'form': form})

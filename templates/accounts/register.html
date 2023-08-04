@@ -7,19 +7,20 @@
       <div class="card">
         <div class="card-header">{{ title }}</div>
         <div class="card-body">
-          <form method="post">
+          <form action="{% url 'accounts:register' %}" method="POST">
+
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" required>
+                  {{ form.username }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" required>
+                  {{ form.email }}
                 </div>
               </div>
             </div>
@@ -27,13 +28,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" required>
+                  {{ form.password }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="confirm_password">Confirm Password</label>
-                  <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                  {{ form.confirm_password }}
                 </div>
               </div>
             </div>
@@ -41,19 +42,19 @@
               <div class="col-md-6">
                 <div class="form-group">
                 <label for="first_name">First Name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                {{ form.first_name }}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                 <label for="last_name">Last Name</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                {{ form.last_name }}
                 </div>
               </div>
             </div>
             <div class="form-group">
               <label for="phone_number">Phone number</label>
-              <input type="text" class="form-control" id="phone_number" name="phone_number">
+              {{ form.phone_number }}
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Register</button>

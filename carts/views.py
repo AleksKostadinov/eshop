@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from shop_app.models import Product, Variation
 from .models import Cart, CartItem
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 class BaseCartView(LoginRequiredMixin, View):
     def get_cart(self, request):
@@ -50,39 +52,36 @@ class CartView(BaseCartView):
     template_name = 'carts/carts.html'
 
     def get(self, request, *args, **kwargs):
+
+        # Get the cart for the current user
+        cart = self.get_cart(request)
+
+        # Get cart items for the cart
+        cart_items = self.get_cart_items(cart)
+
+        # Fetch the shipping cost percentage from the Order model
         try:
-            # Get the cart for the current user
-            cart = self.get_cart(request)
+            order = Order.objects.get(user=request.user, is_ordered=False)
+            shipping_cost_percent = order.shipping_cost_percent
+        except Order.DoesNotExist:
+            shipping_cost_percent = 0
 
-            # Get cart items for the cart
-            cart_items = self.get_cart_items(cart)
+        sum_wo_shipping = self.sum_wo_shipping(cart_items)
 
-            # Fetch the shipping cost percentage from the Order model
-            try:
-                order = Order.objects.get(user=request.user, is_ordered=False)
-                shipping_cost_percent = order.shipping_cost_percent
-            except Order.DoesNotExist:
-                shipping_cost_percent = 0
+        # Calculate the total sum of all cart items
+        shipping_cost, total_sum = self.get_total_sum(cart_items)
 
-            sum_wo_shipping = self.sum_wo_shipping(cart_items)
+        context = {
+            'cart': cart,
+            'cart_items': cart_items,
+            'sum_wo_shipping': sum_wo_shipping,
+            'shipping_cost': shipping_cost,
+            'total_sum': total_sum,
+        }
 
-            # Calculate the total sum of all cart items
-            shipping_cost, total_sum = self.get_total_sum(cart_items)
+        return render(request, self.template_name, context)
 
-            context = {
-                'cart': cart,
-                'cart_items': cart_items,
-                'sum_wo_shipping': sum_wo_shipping,
-                'shipping_cost': shipping_cost,
-                'total_sum': total_sum,
-            }
 
-            return render(request, self.template_name, context)
-
-        except Exception as e:
-            # Handle any other exceptions or errors here
-            # For example, you can render a custom 500 error page
-            return render(request, '500.html', status=500)
 
 # def _cart_id(request):
 #     cart = request.session.session_key
@@ -98,6 +97,7 @@ def message_added_product(request, product, variation_info):
         # Show the success message
     message += " has been added to your cart."
     messages.success(request, message)
+
 
 class AddToCartView(BaseCartView):
     login_url = '/accounts/login/'
@@ -118,6 +118,7 @@ class AddToCartView(BaseCartView):
                 variation_info.append(f"{variation.variation_category.capitalize()}: {variation.variation_value}")
             except Variation.DoesNotExist:
                 pass
+
 
         if cart is None:
             # Create a new cart for the user if it doesn't exist
@@ -153,4 +154,34 @@ class AddToCartView(BaseCartView):
         # Construct the success message with product name and variation information
         message_added_product(request, product, variation_info)
 
+        return redirect('carts:carts')
+
+class RemoveCartView(View):
+    def post(self, request, product_id, cart_item_id):
+        product = get_object_or_404(Product, id=product_id)
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+                cart_item.save()
+            else:
+                cart_item.delete()
+        except Cart.DoesNotExist:
+            pass
+        except CartItem.DoesNotExist:
+            pass
+        return redirect('carts:carts')
+
+class RemoveCartItemView(View):
+    def post(self, request, product_id, cart_item_id):
+        product = get_object_or_404(Product, id=product_id)
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+            cart_item.delete()
+        except Cart.DoesNotExist:
+            pass
+        except CartItem.DoesNotExist:
+            pass
         return redirect('carts:carts')

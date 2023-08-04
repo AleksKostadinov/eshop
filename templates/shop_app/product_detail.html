@@ -98,7 +98,7 @@
                         <h5 class="text-danger">Out of Stock</h5>
                     {% else %}
                         {% if user.is_authenticated %}
-                            <button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i> </button>
+                            <button type="submit" class="btn btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i> </button>
                         {% else %}
                             <a href="{% url 'accounts:login' %}" class="nav-item nav-link"><i class="fas fa-sign-in-alt"> Login</i></a>
                         {% endif %}

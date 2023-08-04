@@ -46,7 +46,7 @@
                     {% for cart_item in cart_items %}
                     <tbody class="align-middle">
                         <tr>
-                            <td>
+                            <td class="align-middle">
                                 <figure class="itemside align-items-center">
                                     <div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
                                     <figcaption class="info">
@@ -61,24 +61,44 @@
                                     </figcaption>
                                 </figure>
                             </td>
+
                             <td class="align-middle">${{ cart_item.product.discounted_price }}</td>
+
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 90px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus fa-xs"></i>
+                                <div class="button-container">
+                                    <form action="{% url 'carts:remove_cart' product_id=cart_item.product.id cart_item_id=cart_item.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-primary btn-minus" id="button-minus">
+                                            <i class="fa fa-minus"></i>
                                         </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="{{ cart_item.quantity }}" readonly>
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus fa-xs"></i>
+                                    </form>
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center smaller-input" value="{{ cart_item.quantity }}" readonly>
+                                    <form method="post" action="{% url 'carts:add_to_cart' product_id=cart_item.product.id %}">
+                                        {% csrf_token %}
+                                        {% for item in cart_item.variations.all %}
+                                            <input type="hidden" name="{{ item.variation_category }}" value="{{ item.variation_value }}">
+                                        {% endfor %}
+                                        <!-- Remove the individual form for the "Add to Cart" button -->
+                                        <button type="submit" class="btn btn-sm btn-primary btn-plus" id="button-plus">
+                                            <i class="fa fa-plus"></i>
                                         </button>
-                                    </div>
+                                    </form>
                                 </div>
                             </td>
+
+
+
+
+
                             <td class="align-middle">${{ cart_item.sub_total }}</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times fa-xs"></i></button></td>
+
+                            <td class="align-middle">
+                                <form action="{% url 'carts:remove_cart_item' product_id=cart_item.product.id cart_item_id=cart_item.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-times fa-xs"></i></button>
+                                </form>
+                            </td>
+
                         </tr>
                     </tbody>
                     {% endfor %}

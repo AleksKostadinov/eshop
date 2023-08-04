@@ -9586,3 +9586,22 @@ a.text-dark:hover, a.text-dark:focus {
 .align-middle .img-sm {
   width: 200px;
 }
+
+/* CSS to align buttons horizontally */
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CSS to make the input field smaller */
+.smaller-input {
+  width: 50px;
+  height: 35px;
+  font-size: 12px;
+}
+
+/* CSS to adjust button size */
+.btn {
+  padding: 6px 12px; 
+}

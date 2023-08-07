@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from accounts.forms import RegisterForm
 from accounts.models import Account
+from django.contrib import messages
 
 
 class CustomLoginView(LoginView):
@@ -57,5 +58,6 @@ class CustomRegisterView(FormView):
             username=username, password=password
             )
         user.save()
+        messages.success(self.request, 'Registration successful.')
 
         return super().form_valid(form)

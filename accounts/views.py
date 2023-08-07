@@ -4,20 +4,35 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from accounts.forms import RegisterForm
 from accounts.models import Account
-from django.contrib import messages
+from django.contrib import messages, auth
+from django.shortcuts import redirect, render
+
+# def login(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = auth.authenticate(username=username, password=password)
+#         if user:
+#             auth.login(request, user)
+#             messages.success(request, 'You have successfully logged in!')
+#             return redirect('shop_app:home')
+
+#         else:
+#             messages.error(request, 'Invalid credentials')
+#     return render(request, 'accounts/login.html')
+
 
 
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
 
+    def form_invalid(self, form):
+        messages.error(self.request,'Invalid username or password')
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 class CustomLogoutView(LogoutView):
-    next_page = reverse_lazy('shop_app:home')
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-
-        return response
+    template_name = "accounts/logout.html"
 
 # def register(request):
 #     if request.method == 'POST':

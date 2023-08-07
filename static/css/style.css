@@ -9610,3 +9610,7 @@ a.text-dark:hover, a.text-dark:focus {
   margin-left: 0px;
   padding-left: 0px;
 }
+
+.nav-item.nav-link.logout-link {
+  color: lightgrey;
+}

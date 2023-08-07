@@ -58,6 +58,7 @@
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Register</button>
+              <p class="text-center mt-2">Have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
             </div>
             {{ form.errors }}
             {{ form.non_field_errors }}

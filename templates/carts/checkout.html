@@ -22,145 +22,66 @@
         <div class="col-lg-8">
             <div class="mb-4">
                 <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
-                <form action="" method="POST">
+                <form action="{%  url 'orders:place_order' %}" method="POST">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John">
+
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label for="">First Name</label>
+                            <input type="text" name="first_name" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
+                        <div class="col form-group">
+                            <label for="">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
+                        <div class="col form-group">
+                            <label for="">Phone Number</label>
+                            <input type="text" name="phone" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label for="">Address Line 1</label>
+                            <input type="text" name="address_line_1" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
+                        <div class="col form-group">
+                            <label for="">Address Line 2</label>
+                            <input type="text" name="address_line_2" class="form-control">
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                            </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label for="">City</label>
+                            <input type="text" name="city" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                        <div class="col form-group">
+                            <label for="">State</label>
+                            <input type="text" name="state" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                        <div class="col form-group">
+                            <label for="">Country</label>
+                            <input type="text" name="country" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
                         </div>
-                        {% comment %} <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="newaccount">
-                                <label class="custom-control-label" for="newaccount">Create an account</label>
-                            </div>
-                        </div> {% endcomment %}
-                        {% comment %} <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="shipto">
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
-                            </div>
-                        </div> {% endcomment %}
+                        <div class="form-row">
+                            <label for="">Order Note</label>
+                            <textarea name="order_note" rows="2" class="form-control"></textarea>
+                        </div>
                     </div>
-                </form>
-            </div>
-            <div class="collapse mb-4" id="shipping-address">
-                <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>First Name</label>
-                        <input class="form-control" type="text" placeholder="John">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Last Name</label>
-                        <input class="form-control" type="text" placeholder="Doe">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>E-mail</label>
-                        <input class="form-control" type="text" placeholder="example@email.com">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Mobile No</label>
-                        <input class="form-control" type="text" placeholder="+123 456 789">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Address Line 1</label>
-                        <input class="form-control" type="text" placeholder="123 Street">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Address Line 2</label>
-                        <input class="form-control" type="text" placeholder="123 Street">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Country</label>
-                        <select class="custom-select">
-                            <option selected>United States</option>
-                            <option>Afghanistan</option>
-                            <option>Albania</option>
-                            <option>Algeria</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>City</label>
-                        <input class="form-control" type="text" placeholder="New York">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>State</label>
-                        <input class="form-control" type="text" placeholder="New York">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>ZIP Code</label>
-                        <input class="form-control" type="text" placeholder="123">
-                    </div>
-                </div>
-            </div>
-        </div>
+            </div> <!-- card.// -->
+
         <div class="col-lg-4">
             <div class="card border-secondary mb-5">
                 <div class="card-header bg-secondary border-0">
                     <h4 class="font-weight-semi-bold m-0">Order Total</h4>
                 </div>
-                {% comment %} <div class="card-body">
-                    <h5 class="font-weight-medium mb-3">Products</h5>
-                    {% for cart_item in cart_items %}
-                    <div class="d-flex justify-content-between">
-                        <p>{{ cart_item.product.product_name }}</p>
-                        <p>{{ cart_item.quantity }} X ${{ cart_item.product.discounted_price }} = ${{ cart_item.sub_total|floatformat:2 }}</p>
-                    </div>
-                    {% endfor %}
-                    <hr class="mt-0">
-                    <div class="d-flex justify-content-between mb-3 pt-1">
-                        <h6 class="font-weight-medium">Subtotal</h6>
-                        <h6 class="font-weight-medium">${{ sum_wo_shipping|floatformat:2 }}</h6>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">${{ shipping_cost|floatformat:2 }}</h6>
-                    </div>
-                </div> {% endcomment %}
-
-
+                
                 <table class="table table-bordered text-center mb-0">
                     <thead class="text-dark">
                         <tr>
@@ -193,8 +114,12 @@
                     {% endfor %}
                 </table>
 
-
                 <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">${{ shipping_cost|floatformat:2 }}</h6>
+                    </div>
+                    <hr>
                     <div class="d-flex justify-content-between mt-2">
                         <h5 class="font-weight-bold">Total</h5>
                         <h5 class="font-weight-bold">${{ total_sum|floatformat:2 }}</h5>
@@ -228,6 +153,7 @@
                 <div class="card-footer border-secondary bg-transparent">
                     <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
                 </div>
+            </form>
             </div>
         </div>
     </div>

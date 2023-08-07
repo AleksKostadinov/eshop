@@ -59,11 +59,11 @@ class CartView(BaseCartView):
         cart_items = self.get_cart_items(cart)
 
         # Fetch the shipping cost percentage from the Order model
-        try:
-            order = Order.objects.get(user=request.user, is_ordered=False)
-            shipping_cost_percent = order.shipping_cost_percent
-        except Order.DoesNotExist:
-            shipping_cost_percent = 0
+        # try:
+        #     order = get_object_or_404(Order, user=request.user, is_ordered=False)
+        #     shipping_cost_percent = order.shipping_cost_percent
+        # except Order.DoesNotExist:
+        #     shipping_cost_percent = 0
 
         sum_wo_shipping = self.sum_wo_shipping(cart_items)
 

@@ -130,7 +130,7 @@
 
                         {% if request.user.is_authenticated %}
 
-		                	<a href="#" class="nav-item nav-link active">{{request.user.first_name | title}}</a>
+		                	<a href="{% url 'accounts:dashboard' %}" class="nav-item nav-link active">{{request.user.first_name | title}}</a>
 	    	                <a href="{% url 'accounts:logout' %}" class="nav-item nav-link logout-link">Logout</a>
 
                         {% else %}

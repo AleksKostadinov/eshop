@@ -1,11 +1,12 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 from accounts.forms import RegisterForm
 from accounts.models import Account
-from django.contrib import messages, auth
-from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # def login(request):
 #     if request.method == 'POST':
@@ -76,3 +77,7 @@ class CustomRegisterView(FormView):
         messages.success(self.request, 'Registration successful.')
 
         return super().form_valid(form)
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'accounts/dashboard.html'
+

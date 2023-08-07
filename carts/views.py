@@ -4,11 +4,10 @@ from django.views import View
 from django.contrib import messages
 from orders.models import Order, ShippingConfig
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.views.generic import TemplateView
 from shop_app.models import Product, Variation
 from .models import Cart, CartItem
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+
 
 class BaseCartView(LoginRequiredMixin, View):
     def get_cart(self, request):
@@ -185,3 +184,6 @@ class RemoveCartItemView(View):
         except CartItem.DoesNotExist:
             pass
         return redirect('carts:carts')
+
+class CheckoutView(CartView):
+    template_name = 'carts/checkout.html'

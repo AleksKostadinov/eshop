@@ -9614,3 +9614,7 @@ a.text-dark:hover, a.text-dark:focus {
 .nav-item.nav-link.logout-link {
   color: lightgrey;
 }
+
+td.font-weight-medium {
+  vertical-align: middle;
+}

@@ -17,7 +17,7 @@
     </div> {% endcomment %}
     <!-- Page Header End -->
 
-    
+
 
     {% if not cart_items %}
         <h2 class="text-center">Your Shopping Cart is Empty</h2>
@@ -128,7 +128,9 @@
                             <h5 class="font-weight-bold">Total</h5>
                             <h5 class="font-weight-bold">${{ total_sum|floatformat:2 }}</h5>
                         </div>
+                        <a href="{% url 'carts:checkout' %}">
                         <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                        </a>
                     </div>
                 </div>
             </div>

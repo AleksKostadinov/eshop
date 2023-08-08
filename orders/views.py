@@ -1,21 +1,43 @@
 from datetime import date
+
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views import View
+
 from carts.views import BaseCartView
 from orders.forms import OrderForm
-from orders.models import Order
+from orders.models import Order, OrderProduct, Payment
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class PlaceOrderView(BaseCartView, LoginRequiredMixin, View):
+
+
+def payments(request):
+    pass
+
+# class PaymentsView(LoginRequiredMixin, View):
+
+#     def get(self, request, *args, **kwargs):
+#         body = json.loads(request.body)
+
+#         order_number = body.get('order_number')
+#         order = get_object_or_404(Order, order_number=order_number)
+#         context = {
+#             'order': order,
+#         }
+
+
+class PlaceOrderView(BaseCartView, LoginRequiredMixin):
 
     def post(self, request, *args, **kwargs):
         current_user = request.user
         base_cart_view = BaseCartView()
         cart = base_cart_view.get_cart(request)
         cart_items = base_cart_view.get_cart_items(cart)
-        sum_wo_shipping = base_cart_view.sum_wo_shipping(cart_items)
-        total_sum, shipping_cost = base_cart_view.get_total_sum(cart_items)
+        total = base_cart_view.sum_wo_shipping(cart_items)
+        tax, grand_total = base_cart_view.get_total_sum(cart_items)
+
+        tax = int(tax * 100) / 100
+        total = int(total * 100) / 100
+        grand_total = total + tax
 
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -31,8 +53,8 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin, View):
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
-            data.order_total = total_sum
-            data.tax = shipping_cost
+            data.order_total = grand_total
+            data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()
 
@@ -46,14 +68,19 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin, View):
             data.order_number = order_number
             data.save()
 
-            order = get_object_or_404(Order, user=current_user, is_ordered=False, order_number=order_number)
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
                 'cart_items': cart_items,
-                'total': sum_wo_shipping,
-                'tax': shipping_cost,
-                'grand_total': total_sum,
+                'total': total,
+                'tax': tax,
+                'grand_total': grand_total,
             }
             return render(request, 'orders/payments.html', context)
-        else:
-            return redirect('carts:checkout')
+
+    def get(self, request, *args, **kwargs):
+        return redirect('carts:checkout')
+
+
+def order_complete(request):
+    pass

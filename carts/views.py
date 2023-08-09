@@ -4,7 +4,6 @@ from django.views import View
 from django.contrib import messages
 from orders.models import Order, ShippingConfig
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
 from shop_app.models import Product, Variation
 from .models import Cart, CartItem
 

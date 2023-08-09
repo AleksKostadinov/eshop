@@ -7,8 +7,9 @@ from carts.views import BaseCartView
 from orders.forms import OrderForm
 from orders.models import Order, OrderProduct, Payment
 from django.contrib.auth.mixins import LoginRequiredMixin
-import json
 from shop_app.models import Product
+from django.contrib import messages
+import json
 
 
 class PaymentsView(View):
@@ -69,6 +70,12 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin):
         base_cart_view = BaseCartView()
         cart = base_cart_view.get_cart(request)
         cart_items = base_cart_view.get_cart_items(cart)
+
+        for item in cart_items:
+            if item.product.quantity <= 0:
+                messages.error(request, f"Product '{item.product.product_name}' is out of stock.")
+                return redirect('carts:carts')
+
         total = base_cart_view.sum_wo_shipping(cart_items)
         tax, grand_total = base_cart_view.get_total_sum(cart_items)
 

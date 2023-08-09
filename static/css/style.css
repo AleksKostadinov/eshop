@@ -9586,35 +9586,3 @@ a.text-dark:hover, a.text-dark:focus {
 .align-middle .img-sm {
   width: 200px;
 }
-
-/* CSS to align buttons horizontally */
-.button-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* CSS to make the input field smaller */
-.smaller-input {
-  width: 38.25px;
-  height: 35px;
-  font-size: 1rem;
-}
-
-/* CSS to adjust button size */
-.btn {
-  padding: 6px 12px;
-}
-
-#message {
-  margin-left: 0px;
-  padding-left: 0px;
-}
-
-.nav-item.nav-link.logout-link {
-  color: lightgrey;
-}
-
-td.font-weight-medium {
-  vertical-align: middle;
-}

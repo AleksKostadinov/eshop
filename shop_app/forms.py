@@ -1,6 +1,8 @@
 from django import forms
 from django.core import validators
 
+from shop_app.models import ReviewRating
+
 
 class ContactForm(forms.Form):
     name = forms.CharField(
@@ -24,3 +26,8 @@ class ContactForm(forms.Form):
         widget=forms.HiddenInput,
         validators=[validators.MaxLengthValidator(0)]
             )
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = ReviewRating
+        fields = ('subject', 'review', 'rating',)

@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Account
+from shop_app.models import Product, Variation
 
 class ShippingConfig(models.Model):
     shipping_cost_percent = models.FloatField()
@@ -64,12 +65,17 @@ class OrderProduct(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=50)
     product_price = models.FloatField()
-    product_quantity = models.IntegerField()
+    quantity = models.IntegerField()
     product_image = models.ImageField(upload_to='uploads/products/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+
+    variations = models.ManyToManyField(Variation, blank=True)
+    ordered = models.BooleanField(default=False)
+
     def __str__(self):
-        return self.product_name
+        return self.product.product_name
 
 

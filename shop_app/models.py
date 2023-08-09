@@ -37,7 +37,7 @@ class Product(models.Model):
     description = models.TextField(max_length=500, blank=True, null=True)
     price = models.IntegerField()
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    discounted_price = models.IntegerField()
+    discounted_price_db = models.IntegerField()
     images = models.ImageField(
         upload_to='photos/products', blank=True, null=True, default='no-products-found.png')
     quantity = models.IntegerField()
@@ -59,8 +59,12 @@ class Product(models.Model):
 
     @property
     def discounted_price(self):
-        discounted_price = self.price - self.price * (self.discount_percentage / 100)
-        return discounted_price
+        return self.price - self.price * (self.discount_percentage / 100)
+
+    def save(self, *args, **kwargs):
+        self.discounted_price_db = self.discounted_price
+
+        super().save(*args, **kwargs)
 
 
 class VariationManager(models.Manager):

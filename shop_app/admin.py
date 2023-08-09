@@ -14,6 +14,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'price', 'discount_percentage', 'discounted_price', 'quantity', 'category', 'updated_at', 'is_available')
     prepopulated_fields = {'slug': ('product_name',)}
+    readonly_fields = ('discounted_price_db',)
+
 
 
 class VariationAdmin(admin.ModelAdmin):

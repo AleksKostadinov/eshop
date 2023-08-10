@@ -3,9 +3,11 @@ from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 from accounts.forms import RegisterForm
-from accounts.models import Account
+from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from orders.models import Order
 
 
 # def login(request):
@@ -80,4 +82,18 @@ class CustomRegisterView(FormView):
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        user=self.request.user
+
+        orders = Order.objects.order_by('-created_at').filter(user=user, is_ordered=True)
+        orders_count = orders.count()
+        userprofile = UserProfile.objects.get(user=user)
+        context['orders'] = orders
+        context['orders_count'] = orders_count
+        context['userprofile'] = userprofile
+
+        return context
 

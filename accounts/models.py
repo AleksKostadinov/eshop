@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Account(AbstractUser):
     first_name = models.CharField(max_length=50)
@@ -28,3 +30,11 @@ class UserProfile(models.Model):
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
 
+@receiver(post_save, sender=Account)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=Account)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()

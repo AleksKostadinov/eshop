@@ -66,7 +66,11 @@ class ShopListView(CategoryGenderBaseView, ListView):
 class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
     def get(self, request, category_slug, gender_slug, slug):
         product = Product.objects.get(slug=slug)
-        in_cart = CartItem.objects.filter(cart__user=request.user, product=product).exists()
+        if request.user.is_authenticated:
+            in_cart = CartItem.objects.filter(cart__user=request.user, product=product).exists()
+        else:
+            # Handle the case when the user is not logged in
+            in_cart = False
 
         if request.user.is_authenticated:
             orderproduct = OrderProduct.objects.filter(user=request.user, product_id=product.id).exists()
@@ -175,5 +179,5 @@ class SubmitReviewView(View):
                 data.user = request.user
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
-                
+
         return redirect(url)

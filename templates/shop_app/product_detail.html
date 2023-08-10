@@ -167,7 +167,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <header class="section-heading">
-                                    <h3>Customer Reviews </h3>
+                                    <h3 class="mb-2">{{ product.product_name }}</h3>
                                     <div class="rating-star">
                                         <span>
                                             <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>
@@ -180,49 +180,47 @@
                                     </div>
                                 </header>
                                 <br>
-                                {% comment %} <div class="media mb-4">
-                                    <a href="">
-                                        <img src="{% static 'img/no-image-user.jpeg' %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    </a>
-                                <div class="media-body"> {% endcomment %}
-                                {% for review in reviews %}
-                                <article class="box mb-3">
-                                    <div class="icontext w-100">
+                                <h4>Customer Reviews: </h4>
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        {% for review in reviews %}
+                                        <article class="box mb-3">
                                             <a href="">
                                                 <img src="{% static 'img/no-image-user.jpeg' %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                                             </a>
-                                            <div class="text">
-                                                <h6 class="mb-1">{{review.user.full_name}} </h6>
-                                                <span class="date text-muted float-md-center">{{review.updated_at}} </span>
-                                                <div class="rating-star">
-                                                    <span>
-                                                        <i class="fa fa-star{% if review.rating == 0.5 %}-half{% elif review.rating < 1 %} {% endif %}" aria-hidden="true"></i>
-                                                        <i class="fa fa-star{% if review.rating == 1.5 %}-half{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
-                                                        <i class="fa fa-star{% if review.rating == 2.5 %}-half{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
-                                                        <i class="fa fa-star{% if review.rating == 3.5 %}-half{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
-                                                        <i class="fa fa-star{% if review.rating == 4.5 %}-half{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
-                                                    </span>
+                                            <div class="icontext w-100">
+                                                <div class="text">
+                                                    <h6 class="mb-1">{{review.user.full_name}} </h6>
+                                                    <span class="date text-muted float-md-center">{{review.updated_at}} </span>
+                                                    <div class="rating-star">
+                                                        <span>Rating:
+                                                            <i class="fa fa-star{% if review.rating == 0.5 %}-half{% elif review.rating < 1 %} {% endif %}" aria-hidden="true"></i>
+                                                            <i class="fa fa-star{% if review.rating == 1.5 %}-half{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                                            <i class="fa fa-star{% if review.rating == 2.5 %}-half{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                                            <i class="fa fa-star{% if review.rating == 3.5 %}-half{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                                            <i class="fa fa-star{% if review.rating == 4.5 %}-half{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
+                                            </div> <!-- icontext.// -->
+                                            <div class="mt-3">
+                                                <h6>Title: {{review.subject}}</h6>
+                                                <p>Comment:
+                                                    {{review.review}}
+                                                </p>
                                             </div>
-                                        </div> <!-- icontext.// -->
-                                        <div class="mt-3">
-                                            <h6>{{review.subject}}</h6>
-                                            <p>
-                                                {{review.review}}
-                                            </p>
-                                        </div>
-                                    </article>
-                                {% endfor %}
+                                        </article>
+                                    {% endfor %}
+                                    </div>
                                 </div>
-                        </div>
-                        </div>
+                            </div>
 
                             <div class="col-md-6">
                                 <form action="{% url 'shop_app:submit_review' product.id %}" method="POST">
                                     {% csrf_token %}
                                 <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                    <div class="d-flex my-3">
+                                <small>Required fields are marked *</small>
+                                    <div class="d-flex my-3 align-items-center">
                                         <p class="mb-0 mr-2">*Your Rating:</p>
                                         <div class="rate">
                                             <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>

@@ -6,24 +6,8 @@ from accounts.forms import RegisterForm
 from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from orders.models import Order
-
-
-# def login(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = auth.authenticate(username=username, password=password)
-#         if user:
-#             auth.login(request, user)
-#             messages.success(request, 'You have successfully logged in!')
-#             return redirect('shop_app:home')
-
-#         else:
-#             messages.error(request, 'Invalid credentials')
-#     return render(request, 'accounts/login.html')
-
+from django.contrib.auth import login
 
 
 class CustomLoginView(LoginView):
@@ -37,25 +21,6 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     template_name = "accounts/logout.html"
 
-# def register(request):
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             first_name = form.cleaned_data['first_name']
-#             last_name = form.cleaned_data['last_name']
-#             email = form.cleaned_data['email']
-#             phone_number = form.cleaned_data['phone_number']
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-
-#             user = Account.objects.create_user(first_name=first_name, last_name=last_name,
-#                                                email=email, phone_number=phone_number,
-#                                                username=username, password=password)
-#             user.save()
-#     else:
-#         form = RegisterForm()
-
-#     return render(request, 'accounts/register.html', {'form': form})
 
 class CustomRegisterView(FormView):
     template_name = 'accounts/register.html'
@@ -76,6 +41,8 @@ class CustomRegisterView(FormView):
             username=username, password=password
             )
         user.save()
+
+        login(self.request, user)
         messages.success(self.request, 'Registration successful.')
 
         return super().form_valid(form)
@@ -85,7 +52,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         user=self.request.user
 
         orders = Order.objects.order_by('-created_at').filter(user=user, is_ordered=True)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeListView, ShopListView, ContactView, ProductDetailView, GenderListView, CategoryListView, CategoryGenderListView, ProductSearchView
+from .views import HomeListView, ShopListView, ContactView, ProductDetailView, GenderListView, CategoryListView, CategoryGenderListView, ProductSearchView, SubmitReviewView
 
 app_name = 'shop_app'
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path('shop/<slug:category_slug>/<slug:gender_slug>/', CategoryGenderListView.as_view(), name='shop_by'),
     path('contact/', ContactView.as_view(), name='contact'),
     path('search/', ProductSearchView.as_view(), name='product_search'),
+    path('submit_review/<int:product_id>/', SubmitReviewView.as_view(), name='submit_review'),
 ]
 

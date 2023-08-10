@@ -1,6 +1,10 @@
-from django.shortcuts import get_object_or_404, render
-from shop_app.forms import ContactForm
-from shop_app.models import Gender, Product, Category
+from django.shortcuts import get_object_or_404, render, redirect
+from django.views import View
+
+from carts.models import CartItem
+from orders.models import OrderProduct
+from shop_app.forms import ContactForm, ReviewForm
+from shop_app.models import Gender, Product, Category, ReviewRating
 from django.views.generic import ListView, TemplateView, DetailView, FormView
 from django.urls import reverse, reverse_lazy
 from django.db.models import Count
@@ -54,10 +58,31 @@ class ShopListView(CategoryGenderBaseView, ListView):
     model = Product
 
 
+# class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
+#     template_name = 'shop_app/product_detail.html'
+#     model = Product
+#     context_object_name = 'product'
+
 class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
-    template_name = 'shop_app/product_detail.html'
-    model = Product
-    context_object_name = 'product'
+    def get(self, request, category_slug, gender_slug, slug):
+        product = Product.objects.get(slug=slug)
+        in_cart = CartItem.objects.filter(cart__user=request.user, product=product).exists()
+
+        if request.user.is_authenticated:
+            orderproduct = OrderProduct.objects.filter(user=request.user, product_id=product.id).exists()
+        else:
+            orderproduct = None
+
+        # Get the reviews
+        reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
+
+        context = {
+            'product': product,
+            'in_cart': in_cart,
+            'orderproduct': orderproduct,
+            'reviews': reviews,
+        }
+        return render(request, 'shop_app/product_detail.html', context)
 
 
 class GenderListView(CategoryGenderBaseView, ListView):
@@ -130,3 +155,25 @@ class ProductSearchView(ListView):
         if query:
             return Product.objects.filter(product_name__icontains=query)
         return Product.objects.all()
+
+
+class SubmitReviewView(View):
+    def post(self, request, product_id):
+        url = request.META.get('HTTP_REFERER')
+        try:
+            review = ReviewRating.objects.get(user=request.user, product_id=product_id)
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Thank you! Your review has been updated.')
+        except ReviewRating.DoesNotExist:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.product_id = product_id
+                data.user = request.user
+                data.save()
+                messages.success(request, 'Thank you! Your review has been submitted.')
+                
+        return redirect(url)

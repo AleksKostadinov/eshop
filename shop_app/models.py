@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
-
 from accounts.models import Account
+from django.db.models import Avg, Count
 
 
 class Gender(models.Model):
@@ -49,12 +49,27 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-updated_at']
+
     def get_url(self):
         return reverse('shop_app:product_detail', args=[self.gender.slug, self.category.slug, self.slug])
 
+    def average_review(self):
+        reviews = ReviewRating.objects.filter(
+            product=self, status=True).aggregate(average=Avg('rating'))
+        avg = 0
+        if reviews['average']:
+            avg = float(reviews['average'])
+        return avg
 
-    class Meta:
-        ordering = ['-updated_at']
+    def count_review(self):
+        reviews = ReviewRating.objects.filter(
+            product=self, status=True).aggregate(count=Count('id'))
+        count = 0
+        if reviews['count']:
+            count = int(reviews['count'])
+        return count
 
     def __str__(self):
         return self.product_name

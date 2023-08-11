@@ -63,10 +63,10 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    product_name = models.CharField(max_length=50)
+    product_name = models.CharField(max_length=50, blank=True, null=True)
     product_price = models.FloatField()
     quantity = models.IntegerField()
-    product_image = models.ImageField(upload_to='uploads/products/')
+    product_image = models.ImageField(upload_to='uploads/products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

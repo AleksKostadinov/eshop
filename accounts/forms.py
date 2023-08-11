@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account
+from .models import Account, UserProfile
 from .validations import clean_username, clean_password, clean_phone_number, clean_first_name, clean_last_name
 
 
@@ -41,6 +41,29 @@ class RegisterForm(forms.ModelForm):
         self.fields['phone_number'].validators.append(clean_phone_number)
         self.fields['first_name'].validators.append(clean_first_name)
         self.fields['last_name'].validators.append(clean_last_name)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['first_name', 'last_name', 'phone_number']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+class UserProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
+    class Meta:
+        model = UserProfile
+        fields = ['address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'

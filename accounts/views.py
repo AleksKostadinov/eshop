@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,6 +8,7 @@ from accounts.forms import AccountForm, ChangePasswordForm, RegisterForm, UserPr
 from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.validations import clean_password
 from orders.models import Order
 from django.contrib.auth import login
 from django.views.generic.edit import UpdateView
@@ -145,16 +147,24 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         confirm_password = form.cleaned_data['confirm_password']
 
         user = self.request.user
+        success = user.check_password(current_password)
 
-        if new_password == confirm_password:
-            success = user.check_password(current_password)
-            if success:
-                user.set_password(new_password)
-                user.save()
-                messages.success(self.request, 'Password updated successfully.')
+        if success:
+            if current_password == new_password:
+                messages.error(self.request, 'New password cannot be same as current password.')
+                return self.form_invalid(form)
+            elif new_password == confirm_password:
+                try:
+                    clean_password(new_password)
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(self.request, 'Password updated successfully.')
+                except forms.ValidationError as e:
+                    messages.error(self.request, e)
+                    return self.form_invalid(form)
             else:
-                messages.error(self.request, 'Please enter a valid current password.')
+                messages.error(self.request, 'Password does not match!')
         else:
-            messages.error(self.request, 'Password does not match!')
+            messages.error(self.request, 'Please enter a valid current password.')
 
         return super().form_valid(form)

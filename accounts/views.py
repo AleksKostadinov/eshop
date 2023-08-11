@@ -9,9 +9,10 @@ from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.validations import clean_first_name, clean_last_name, clean_password, clean_phone_number
-from orders.models import Order
+from orders.models import Order, OrderProduct
 from django.contrib.auth import login
 from django.views.generic.edit import UpdateView
+from django.views.generic import DetailView
 
 
 class CustomLoginView(LoginView):
@@ -178,3 +179,22 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
             messages.error(self.request, 'Please enter a valid current password.')
 
         return super().form_valid(form)
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'accounts/order_detail.html'
+    model = Order
+
+    def get_object(self, queryset=None):
+        order_number = self.kwargs.get('order_number')
+        return Order.objects.get(order_number=order_number)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        order_detail = OrderProduct.objects.filter(order__order_number=self.object.order_number)
+        sub_total = sum(item.product_price * item.quantity for item in order_detail)
+
+        context["order_detail"] = order_detail
+        context["sub_total"] = sub_total
+        return context
+

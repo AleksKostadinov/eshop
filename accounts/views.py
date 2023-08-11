@@ -3,7 +3,7 @@ from django.contrib.auth.views import LogoutView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
-from accounts.forms import AccountForm, RegisterForm, UserProfileForm
+from accounts.forms import AccountForm, ChangePasswordForm, RegisterForm, UserProfileForm
 from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -134,3 +134,27 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 
         return super().form_valid(form)
 
+class ChangePasswordView(LoginRequiredMixin, FormView):
+    template_name = 'accounts/change_password.html'
+    form_class = ChangePasswordForm
+    success_url = reverse_lazy('accounts:change_password')
+
+    def form_valid(self, form):
+        current_password = form.cleaned_data['current_password']
+        new_password = form.cleaned_data['new_password']
+        confirm_password = form.cleaned_data['confirm_password']
+
+        user = self.request.user
+
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                messages.success(self.request, 'Password updated successfully.')
+            else:
+                messages.error(self.request, 'Please enter a valid current password.')
+        else:
+            messages.error(self.request, 'Password does not match!')
+
+        return super().form_valid(form)

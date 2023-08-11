@@ -4,7 +4,7 @@ from django.views import View
 from carts.models import CartItem
 from orders.models import OrderProduct
 from shop_app.forms import ContactForm, ReviewForm
-from shop_app.models import Gender, Product, Category, ReviewRating
+from shop_app.models import Gender, Product, Category, ProductGallery, ReviewRating
 from django.views.generic import ListView, TemplateView, DetailView, FormView
 from django.urls import reverse, reverse_lazy
 from django.db.models import Count
@@ -80,11 +80,16 @@ class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
         # Get the reviews
         reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
 
+        # Get the product gallery
+
+        product_gallery = ProductGallery.objects.filter(product_id=product.id)
+
         context = {
             'product': product,
             'in_cart': in_cart,
             'orderproduct': orderproduct,
             'reviews': reviews,
+            'product_gallery': product_gallery,
         }
         return render(request, 'shop_app/product_detail.html', context)
 

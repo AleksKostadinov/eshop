@@ -20,25 +20,21 @@
     <!-- Shop Detail Start -->
     <div class="container-fluid py-5">
         <div class="row px-xl-5">
-            <div class="col-lg-4 pb-5">
-                <div id="product-carousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner border">
-                            <div class="carousel-item active">
-                                <img class="w-10 h-10" src="{{ product.images.url }}" alt="Image">
-                            </div>
+                <div class="col-lg-4 pb-5">
+                    <div class="img-big-wrap mainImage">
+                        <center><img src="{{ product.images.url }}"></center>
                     </div>
-                    <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                        <i class="fa fa-2x fa-angle-left text-dark"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                        <i class="fa fa-2x fa-angle-right text-dark"></i>
-                    </a>
+                    <ul class="thumb">
+                        <li>
+                            <a href="{{ product.images.url }}" target="mainImage"><img class="cover" src="{{ product.images.url }}" alt="Product Image"></a>
+                            {% for i in product_gallery %}
+                                <a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
+                            {% endfor %}
+                        </li>
+                    </ul>
                 </div>
-            </div>
             <div class="col-lg-7 pb-5">
                 <h3 class="font-weight-semi-bold">{{ product.product_name }}</h3>
-
-
                 <div class="d-flex mb-3 rating-star">
                     <span>
                         <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>

@@ -1,5 +1,13 @@
 from django.contrib import admin
-from shop_app.models import Category, Gender, Product, ReviewRating, Variation
+from shop_app.models import Category, Gender, Product, ProductGallery, ReviewRating, Variation
+import admin_thumbnails
+
+
+@admin_thumbnails.thumbnail('image')
+class ProductGalleryInline(admin.TabularInline):
+    model = ProductGallery
+    extra = 1
+
 
 class GenderAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('gender_name',)}
@@ -15,6 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'price', 'discount_percentage', 'discounted_price', 'quantity', 'category', 'updated_at', 'is_available')
     prepopulated_fields = {'slug': ('product_name',)}
     readonly_fields = ('discounted_price_db',)
+    inlines = [ProductGalleryInline]
 
 
 class VariationAdmin(admin.ModelAdmin):
@@ -28,3 +37,4 @@ admin.site.register(Gender, GenderAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Variation, VariationAdmin)
 admin.site.register(ReviewRating)
+admin.site.register(ProductGallery)

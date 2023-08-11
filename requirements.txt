@@ -1,9 +1,10 @@
 asgiref==3.7.2
 da-vinci==0.4.0
 Django==4.2.3
-django-admin-honeypot==1.1.0
+django-admin-honeypot @ git+https://github.com/dmpayton/django-admin-honeypot.git@a840496d183df89965eeb33c9a5dd9ea3919dfff
 django-admin-thumbnails==0.2.8
 django-ipware==5.0.0
+django-session-timeout==0.1.0
 Pillow==10.0.0
 python-decouple==3.8
 secure-smtplib==0.1.1

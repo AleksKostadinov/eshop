@@ -8,7 +8,7 @@ from accounts.forms import AccountForm, ChangePasswordForm, RegisterForm, UserPr
 from accounts.models import Account, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from accounts.validations import clean_password
+from accounts.validations import clean_first_name, clean_last_name, clean_password, clean_phone_number
 from orders.models import Order
 from django.contrib.auth import login
 from django.views.generic.edit import UpdateView
@@ -130,9 +130,18 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         profile_form = self.profile_form_class(self.request.POST, self.request.FILES, instance=self.request.user.userprofile)
 
         if account_form.is_valid() and profile_form.is_valid():
-            account_form.save()
-            profile_form.save()
-            messages.success(self.request, 'Your profile has been updated.')
+            try:
+                account_form.cleaned_data['phone_number'] = clean_phone_number(account_form.cleaned_data['phone_number'])
+                account_form.cleaned_data['first_name'] = clean_first_name(account_form.cleaned_data['first_name'])
+                account_form.cleaned_data['last_name'] = clean_last_name(account_form.cleaned_data['last_name'])
+
+                account_form.save()
+                profile_form.save()
+                messages.success(self.request, 'Your profile has been updated.')
+            except forms.ValidationError as e:
+                for error_msg in e.error_list:
+                    for msg in error_msg.messages:
+                        messages.error(self.request, msg)
 
         return super().form_valid(form)
 
@@ -160,8 +169,9 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
                     user.save()
                     messages.success(self.request, 'Password updated successfully.')
                 except forms.ValidationError as e:
-                    messages.error(self.request, e)
-                    return self.form_invalid(form)
+                    for error_msg in e.error_list:
+                        for msg in error_msg.messages:
+                            messages.error(self.request, msg)
             else:
                 messages.error(self.request, 'Password does not match!')
         else:

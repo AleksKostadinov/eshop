@@ -1,12 +1,11 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
-
 from carts.models import CartItem
 from orders.models import OrderProduct
 from shop_app.forms import ContactForm, ReviewForm
 from shop_app.models import Gender, Product, Category, ProductGallery, ReviewRating
-from django.views.generic import ListView, TemplateView, DetailView, FormView
-from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, FormView
+from django.urls import reverse_lazy
 from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
@@ -48,6 +47,8 @@ class HomeListView(CategoryGenderBaseView, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        top_products = Product.objects.top_by_rating()
+        context['top_products'] = top_products
         context['products_count'] = self.model.objects.count()
         context['just_arrived'] = self.model.objects.order_by('-updated_at')[:4]
         return context

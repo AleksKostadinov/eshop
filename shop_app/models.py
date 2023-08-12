@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
+from shop_app.managers import ProductManager, VariationManager
 
 
 class Gender(models.Model):
@@ -52,6 +53,8 @@ class Product(models.Model):
     class Meta:
         ordering = ['-updated_at']
 
+    objects = ProductManager()
+
     def get_url(self):
         return reverse('shop_app:product_detail', args=[self.gender.slug, self.category.slug, self.slug])
 
@@ -84,16 +87,11 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
-class VariationManager(models.Manager):
-    def colors(self):
-        return super().filter(variation_category='color', is_active=True)
-    def sizes(self):
-        return super().filter(variation_category='size', is_active=True)
-
 variation_category_choice = (
     ('color', 'color'),
     ('size', 'size'),
 )
+
 
 class Variation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

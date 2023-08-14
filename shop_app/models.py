@@ -3,6 +3,7 @@ from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
 from shop_app.managers import ProductManager, VariationManager
+from django.utils import timezone
 
 
 class Gender(models.Model):
@@ -40,7 +41,7 @@ class Product(models.Model):
     description = models.TextField(max_length=500, blank=True, null=True)
     price = models.IntegerField()
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    discounted_price_db = models.IntegerField()
+    discounted_price_db = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     images = models.ImageField(
         upload_to='photos/products', blank=True, null=True, default='no-products-found.png')
     quantity = models.IntegerField()
@@ -49,6 +50,9 @@ class Product(models.Model):
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    collection = models.ForeignKey('Collection', on_delete=models.SET_NULL, blank=True, null=True)
+    # additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
 
     class Meta:
         ordering = ['-updated_at']
@@ -79,12 +83,50 @@ class Product(models.Model):
 
     @property
     def discounted_price(self):
-        return self.price - self.price * (self.discount_percentage / 100)
+        base_discounted_price = self.price - self.price * (self.discount_percentage / 100)
+        if self.collection and self.collection_in_season():
+            seasonal_discount_percentage = self.collection.additional_discount_percentage
+            seasonal_discount = base_discounted_price * (seasonal_discount_percentage / 100)
+            return f'{(base_discounted_price - seasonal_discount):.2f}'
+        return f'{base_discounted_price:.2f}'
+
+    def collection_in_season(self):
+        if self.collection:
+            today = timezone.now().date()
+            return self.collection.start_date <= today <= self.collection.end_date
+        return False
+
 
     def save(self, *args, **kwargs):
         self.discounted_price_db = self.discounted_price
 
         super().save(*args, **kwargs)
+
+
+class Collection(models.Model):
+    collection_name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.collection_name
+
+    def save(self, *args, **kwargs):
+        if self.additional_discount_percentage > 0:
+            self.apply_seasonal_discount()
+        super().save(*args, **kwargs)
+
+    def apply_seasonal_discount(self):
+        products_in_collection = Product.objects.filter(collection=self)
+        for product in products_in_collection:
+            if product.collection_in_season():
+                product.additional_discount_percentage = self.additional_discount_percentage
+                product.save(update_fields=['additional_discount_percentage'])
+                product.save()
 
 
 variation_category_choice = (

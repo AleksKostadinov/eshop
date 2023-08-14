@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop_app.models import Category, Gender, Product, ProductGallery, ReviewRating, Variation
+from shop_app.models import Category, Collection, Gender, Product, ProductGallery, ReviewRating, Variation
 import admin_thumbnails
 
 
@@ -20,10 +20,16 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'price', 'discount_percentage', 'discounted_price', 'quantity', 'category', 'updated_at', 'is_available')
+    list_display = ('product_name', 'price', 'discount_percentage', 'discounted_price', 'quantity', 'category', 'collection', 'updated_at', 'is_available')
+    list_filter = ('category', 'collection', 'is_available')
     prepopulated_fields = {'slug': ('product_name',)}
     readonly_fields = ('discounted_price_db',)
     inlines = [ProductGalleryInline]
+
+
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ('collection_name', 'start_date', 'end_date', 'additional_discount_percentage',)
+    prepopulated_fields = {'slug': ('collection_name',)}
 
 
 class VariationAdmin(admin.ModelAdmin):
@@ -38,3 +44,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Variation, VariationAdmin)
 admin.site.register(ReviewRating)
 admin.site.register(ProductGallery)
+admin.site.register(Collection, CollectionAdmin)

@@ -48,13 +48,12 @@
 
 
                 <h3 class="font-weight-semi-bold mb-4">
-                    $
-                    {% if product.discounted_price %}
-                        {{ product.discounted_price }}
-                    {% else %}
-                        {{ product.price }}
+                    ${{ product.discounted_price }}
+                    {% if product.discount_percentage or product.collection %}
+                    <span class="text-muted ml-2"><del>${{ product.price }}</del></span>
                     {% endif %}
                 </h3>
+
                 <p class="mb-4">{{ product.description }}</p>
 
                 <form method="post" action="{% url 'carts:add_to_cart' product_id=product.id %}">

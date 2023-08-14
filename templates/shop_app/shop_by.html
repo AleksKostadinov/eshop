@@ -169,7 +169,7 @@
                                     <h6 class="text-truncate mb-3">{{ product.product_name }}</h6>
                                     <div class="d-flex justify-content-center">
                                         <h6>${{ product.discounted_price }}</h6>
-                                        {% if product.discount_percentage %}
+                                        {% if product.discount_percentage or product.collection %}
                                             <h6 class="text-muted ml-2"><del>${{ product.price }}</del></h6>
                                         {% endif %}
                                     </div>

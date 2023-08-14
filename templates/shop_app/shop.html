@@ -166,21 +166,23 @@
                                     </a>
                                 </div>
                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                    <h6 class="text-truncate mb-3">{{ product.product_name }}</h6>
-                                    <div class="d-flex justify-content-center">
-                                        <h6>${{ product.discounted_price }}</h6>
-                                        {% if product.discount_percentage %}
-                                            <h6 class="text-muted ml-2"><del>${{ product.price }}</del></h6>
+                                    <h5 class="text-truncate mb-3">{{ product.product_name }}</h5>
+
+                                    <h6 class="font-weight-semi-bold mb-4">
+                                        ${{ product.discounted_price }}
+                                        {% if product.discount_percentage or product.collection %}
+                                        <span class="text-muted ml-2"><del>${{ product.price }}</del></span>
                                         {% endif %}
+                                    </h6>
+                                    <div class="rating-star">
+                                        <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half {% endif %}" aria-hidden="true"></i>
                                     </div>
                                 </div>
-                                <div class="rating-star">
-                                    <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>
-                                        <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half {% endif %}" aria-hidden="true"></i>
-                                        <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half {% endif %}" aria-hidden="true"></i>
-                                        <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half {% endif %}" aria-hidden="true"></i>
-                                        <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half {% endif %}" aria-hidden="true"></i>
-                                </div>
+
                                 <div class="card-footer d-flex justify-content-between bg-light border">
                                     <a href="{{ product.get_url }}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                                     {% comment %} <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}

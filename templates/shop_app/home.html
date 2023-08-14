@@ -76,49 +76,34 @@
     </div>
 </div>
 <!-- Categories End -->
-
 <!-- Offer Start -->
 <div class="container-fluid offer pt-5">
     <div class="row px-xl-5">
-        <div class="col-md-6 pb-4">
-            <div
-                class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5"
-            >
-                <img src="{% static 'img/offer-1.png' %}" alt="" />
-                <div class="position-relative" style="z-index: 1">
-                    <h5 class="text-uppercase text-primary mb-3">
-                        20% off the all order
-                    </h5>
-                    <h1 class="mb-4 font-weight-semi-bold">
-                        Spring Collection
-                    </h1>
-                    <a href="" class="btn btn-outline-primary py-md-2 px-md-3"
-                        >Shop Now</a
-                    >
+        {% for collection in collections %}
+            {% if forloop.counter0|divisibleby:2 %}
+                </div><div class="row px-xl-5">
+            {% endif %}
+            <div class="col-md-6 pb-4">
+                <div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+                    <img src="{{ collection.images.url }}" alt="" />
+                    <div class="position-relative" style="z-index: 1">
+                        <h5 class="text-uppercase text-primary mb-3">
+                            {{ collection.additional_discount_percentage }}% off the all order
+                        </h5>
+                        <h1 class="mb-4 font-weight-semi-bold">
+                            {{ collection.collection_name }}
+                        </h1>
+                        <a href="{% url 'shop_app:shop_by' collection_slug=collection.slug %}" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 pb-4">
-            <div
-                class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5"
-            >
-                <img src="{% static 'img/offer-2.png' %}" alt="" />
-                <div class="position-relative" style="z-index: 1">
-                    <h5 class="text-uppercase text-primary mb-3">
-                        20% off the all order
-                    </h5>
-                    <h1 class="mb-4 font-weight-semi-bold">
-                        Winter Collection
-                    </h1>
-                    <a href="" class="btn btn-outline-primary py-md-2 px-md-3"
-                        >Shop Now</a
-                    >
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 <!-- Offer End -->
+
+
+
 <!-- Products Start -->
 <div class="container-fluid pt-5">
     <div class="text-center mb-4">
@@ -148,7 +133,7 @@
                     <h6 class="text-truncate mb-3">{{ product.product_name }}</h6>
                     <div class="d-flex justify-content-center">
                         <h6>${{ product.discounted_price }}</h6>
-                        {% if product.discount_percentage %}
+                        {% if product.discount_percentage or product.collection %}
                         <h6 class="text-muted ml-2"><del>${{ product.price }}</del></h6>
                         {% endif %}
                     </div>

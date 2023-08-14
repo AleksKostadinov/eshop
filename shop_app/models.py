@@ -107,6 +107,8 @@ class Collection(models.Model):
     collection_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     description = models.TextField(max_length=500, blank=True, null=True)
+    images = models.ImageField(
+        upload_to='photos/collections', blank=True, null=True, default='no-products-found.png')
     start_date = models.DateField()
     end_date = models.DateField()
 

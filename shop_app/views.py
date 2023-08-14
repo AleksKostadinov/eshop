@@ -3,7 +3,7 @@ from django.views import View
 from carts.models import CartItem
 from orders.models import OrderProduct
 from shop_app.forms import ContactForm, ReviewForm
-from shop_app.models import Gender, Product, Category, ProductGallery, ReviewRating
+from shop_app.models import Collection, Gender, Product, Category, ProductGallery, ReviewRating
 from django.views.generic import ListView, DetailView, FormView
 from django.urls import reverse_lazy
 from django.db.models import Count
@@ -29,14 +29,16 @@ class ProductsMixin:
 class CategoryGenderBaseView():
     template_name = 'shop_app/shop_by.html'
     context_object_name = 'products'
-    paginate_by = 3
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = Category.objects.all()
         genders = Gender.objects.annotate(product_count=Count('product'))
+        collections = Collection.objects.all()
         context['categories'] = categories
         context['genders'] = genders
+        context['collections'] = collections
         return context
 
 
@@ -109,6 +111,15 @@ class CategoryListView(CategoryGenderBaseView, ListView):
         category = get_object_or_404(Category, slug=category_slug)
 
         return Product.objects.filter(category=category)
+
+
+class CollectionListView(CategoryGenderBaseView, ListView):
+
+    def get_queryset(self):
+        collection_slug = self.kwargs.get('collection_slug')
+        collection = get_object_or_404(Collection, slug=collection_slug)
+
+        return Product.objects.filter(collection=collection)
 
 
 class CategoryGenderListView(CategoryGenderBaseView, ListView):

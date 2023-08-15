@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(unique=True)),
                 ('description', models.TextField(blank=True, max_length=500, null=True)),
                 ('price', models.IntegerField()),
-                ('discount_percentage', models.DecimalField(decimal_places=2, default=0, max_digits=5)),
+                ('discount_percentage', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
                 ('images', models.ImageField(blank=True, default='no-products-found.png', null=True, upload_to='photos/products')),
                 ('quantity', models.IntegerField()),
                 ('is_available', models.BooleanField(default=True)),

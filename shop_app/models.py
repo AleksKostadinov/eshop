@@ -41,8 +41,8 @@ class Product(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(max_length=500, blank=True, null=True)
     price = models.IntegerField()
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    discounted_price_db = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    discount_percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    discounted_price_db = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     images = models.ImageField(
         upload_to='photos/products', blank=True, null=True, default='no-products-found.png')
     quantity = models.IntegerField()
@@ -52,7 +52,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey('Collection', on_delete=models.SET_NULL, blank=True, null=True)
-    additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    additional_discount_percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
 
     class Meta:
@@ -118,7 +118,7 @@ class Collection(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
-    additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    additional_discount_percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.collection_name

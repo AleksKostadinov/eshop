@@ -13,21 +13,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='order',
             name='order_total',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=5),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AlterField(
             model_name='order',
             name='tax',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=5),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AlterField(
             model_name='orderproduct',
             name='product_price',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=5),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AlterField(
             model_name='shippingconfig',
             name='shipping_cost_percent',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=5),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
     ]

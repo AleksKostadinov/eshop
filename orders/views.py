@@ -1,5 +1,5 @@
 from datetime import date
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from carts.models import CartItem
@@ -57,8 +57,6 @@ class PaymentsView(View):
         # Clear cart
         CartItem.objects.filter(cart__user=request.user).delete()
 
-
-
         # Send order number and transaction id back to sendData method via JsonResponse
         data = {
             'order_number': order.order_number,
@@ -70,6 +68,7 @@ class PaymentsView(View):
 class PlaceOrderView(BaseCartView, LoginRequiredMixin):
 
     def post(self, request, *args, **kwargs):
+
         current_user = request.user
         base_cart_view = BaseCartView()
         cart = base_cart_view.get_cart(request)
@@ -83,9 +82,8 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin):
         total = base_cart_view.sum_wo_shipping(cart_items)
         tax, grand_total = base_cart_view.get_total_sum(cart_items)
 
-        tax = int(tax * 100) / 100
-        total = int(total * 100) / 100
-        grand_total = total + tax
+        tax = float(tax)
+        grand_total = float(grand_total)
 
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -153,13 +151,14 @@ class OrderCompleteView(View):
             to_email = request.user.email
             send_email = EmailMessage(subject, message, to=[to_email])
             send_email.send()
-            print(subtotal)
+
             context = {
                 'order': order,
                 'ordered_products': ordered_products,
                 'order_number': order.order_number,
                 'transID': payment.payment_id,
                 'payment': payment,
+                'subtotal': subtotal,
             }
             return render(request, 'orders/order_complete.html', context)
         except (Payment.DoesNotExist, Order.DoesNotExist):

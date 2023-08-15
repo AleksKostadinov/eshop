@@ -20,13 +20,13 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True, max_length=500, null=True)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField()),
-                ('additional_discount_percentage', models.DecimalField(decimal_places=2, default=0, max_digits=5)),
+                ('additional_discount_percentage', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
             ],
         ),
         migrations.AddField(
             model_name='product',
             name='collection_discount_percentage',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=5),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AddField(
             model_name='product',

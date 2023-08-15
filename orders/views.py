@@ -2,7 +2,7 @@ from datetime import date
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from carts.models import Cart, CartItem
+from carts.models import CartItem
 from carts.views import BaseCartView
 from orders.forms import OrderForm
 from orders.models import Order, OrderProduct, Payment

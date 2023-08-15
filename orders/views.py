@@ -87,7 +87,7 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin):
 
         form = OrderForm(request.POST)
         if form.is_valid():
-            data = Order()
+            data = form.save(commit=False)
             data.user = current_user
             data.first_name = form.cleaned_data['first_name']
             data.last_name = form.cleaned_data['last_name']
@@ -115,6 +115,12 @@ class PlaceOrderView(BaseCartView, LoginRequiredMixin):
             data.save()
 
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+
+            request.session['order_data'] = {
+                'order_number': order_number,
+                'email': data.email,
+            }
+
             context = {
                 'order': order,
                 'cart_items': cart_items,
@@ -141,6 +147,13 @@ class OrderCompleteView(View):
 
             payment = Payment.objects.get(payment_id=transID)
 
+            # Retrieve email from session
+            order_data = request.session.get('order_data')
+            if order_data:
+                email = order_data.get('email')
+            else:
+                email = None
+
             subject = 'Thank you for your order!'
             message = render_to_string('orders/order_received_email.html', {
                 'user': request.user,
@@ -148,9 +161,10 @@ class OrderCompleteView(View):
                 'ordered_products': ordered_products,
                 'subtotal': subtotal,
             })
-            to_email = request.user.email
-            send_email = EmailMessage(subject, message, to=[to_email])
-            send_email.send()
+
+            if email:
+                send_email = EmailMessage(subject, message, to=[email])
+                send_email.send()
 
             context = {
                 'order': order,

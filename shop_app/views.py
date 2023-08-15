@@ -1,3 +1,5 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from carts.models import CartItem
@@ -10,6 +12,7 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Avg, Count, F
 
 
 def custom_404(request, exception):
@@ -29,7 +32,7 @@ class ProductsMixin:
 class CategoryGenderBaseView():
     template_name = 'shop_app/shop_by.html'
     context_object_name = 'products'
-    paginate_by = 5
+    paginate_by = 6
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,7 +55,7 @@ class HomeListView(CategoryGenderBaseView, ListView):
         top_products = Product.objects.top_by_rating()
         context['top_products'] = top_products
         context['products_count'] = self.model.objects.count()
-        context['just_arrived'] = self.model.objects.order_by('-updated_at')[:4]
+        context['just_arrived'] = self.model.objects.order_by('-created_at')[:4]
         return context
 
 
@@ -60,11 +63,18 @@ class ShopListView(CategoryGenderBaseView, ListView):
     template_name = 'shop_app/shop.html'
     model = Product
 
+    def get_queryset(self):
+        sort_param = self.request.GET.get('sort', 'latest')  # Default to sorting by latest
+        queryset = Product.objects.all()
 
-# class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
-#     template_name = 'shop_app/product_detail.html'
-#     model = Product
-#     context_object_name = 'product'
+        if sort_param == 'latest':
+            queryset = queryset.order_by('-created_at')
+        elif sort_param == 'reviews':
+            queryset = queryset.annotate(review_count=Count('reviewrating')).order_by('-review_count')
+        elif sort_param == 'rating':
+            queryset = queryset.annotate(average_rating=Avg('reviewrating__rating')).order_by('-average_rating')
+        return queryset
+
 
 class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
     def get(self, request, category_slug, gender_slug, slug):

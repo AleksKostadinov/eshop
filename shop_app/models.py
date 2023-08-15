@@ -4,6 +4,7 @@ from accounts.models import Account
 from django.db.models import Avg, Count
 from shop_app.managers import ProductManager, VariationManager
 from django.utils import timezone
+from decimal import Decimal
 
 
 class Gender(models.Model):
@@ -51,7 +52,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey('Collection', on_delete=models.SET_NULL, blank=True, null=True)
-    # additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    additional_discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
 
     class Meta:
@@ -87,8 +88,8 @@ class Product(models.Model):
         if self.collection and self.collection_in_season():
             seasonal_discount_percentage = self.collection.additional_discount_percentage
             seasonal_discount = base_discounted_price * (seasonal_discount_percentage / 100)
-            return f'{(base_discounted_price - seasonal_discount):.2f}'
-        return f'{base_discounted_price:.2f}'
+            return Decimal(f'{(base_discounted_price - seasonal_discount):.2f}')
+        return Decimal(f'{base_discounted_price:.2f}')
 
     def collection_in_season(self):
         if self.collection:
@@ -98,6 +99,11 @@ class Product(models.Model):
 
 
     def save(self, *args, **kwargs):
+        if self.collection and self.collection_in_season():
+            self.additional_discount_percentage = self.collection.additional_discount_percentage
+        # else:
+        #     self.additional_discount_percentage = Decimal('0')
+
         self.discounted_price_db = self.discounted_price
 
         super().save(*args, **kwargs)

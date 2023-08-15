@@ -1,4 +1,3 @@
-# models.py
 from django.db import models
 from accounts.models import Account
 from shop_app.models import Product, Variation

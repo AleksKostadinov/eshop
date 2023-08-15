@@ -20,10 +20,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'price', 'discount_percentage', 'discounted_price', 'quantity', 'category', 'collection', 'created_at', 'updated_at', 'is_available')
+    list_display = ('product_name', 'discounted_price', 'discount_percentage', 'collection', 'additional_discount_percentage', 'price', 'quantity', 'category',  'created_at', 'updated_at', 'is_available')
     list_filter = ('category', 'collection', 'is_available')
     prepopulated_fields = {'slug': ('product_name',)}
-    readonly_fields = ('discounted_price_db',)
+    readonly_fields = ('discounted_price_db', 'additional_discount_percentage')
     inlines = [ProductGalleryInline]
 
 

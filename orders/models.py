@@ -3,10 +3,10 @@ from accounts.models import Account
 from shop_app.models import Product, Variation
 
 class ShippingConfig(models.Model):
-    shipping_cost_percent = models.FloatField()
+    shipping_cost_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     def __str__(self):
-        return f'Shipping Percent: {self.shipping_cost_percent:.2f}'
+        return f'Shipping Percent: {self.shipping_cost_percent}'
 
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -40,15 +40,13 @@ class Order(models.Model):
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     order_note = models.CharField(max_length=100, blank=True)
-    order_total = models.FloatField()
-    tax = models.FloatField()
+    order_total = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    tax = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     status = models.CharField(max_length=10, choices=STATUS, default='New')
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # shipping_cost_percent = models.FloatField(blank=True, null=True)
-
 
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
@@ -64,7 +62,7 @@ class OrderProduct(models.Model):
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=50, blank=True, null=True)
-    product_price = models.FloatField()
+    product_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     quantity = models.IntegerField()
     product_image = models.ImageField(upload_to='uploads/products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

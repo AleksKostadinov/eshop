@@ -1,0 +1,30 @@
+{% autoescape off %}
+
+Hi {{ user.first_name }},
+
+YOUR ORDER HAS BEEN RECEIVED
+
+Order Number: {{ order.order_number }}
+
+Order Date: {{ order.created_at }}
+
+Ordered Products:
+{% for item in ordered_products %}
+- Product: {{ item.product.product_name }}
+  {% if item.variations.all %}
+    Variations:
+    {% for variation in item.variations.all %}
+      - {{ variation.variation_category }}: {{ variation.variation_value }}
+    {% endfor %}
+  {% endif %}
+  Quantity: {{ item.quantity }}
+  Total: ${{ item.product_price|floatformat:2 }} USD
+{% endfor %}
+
+Sub Total: ${{ subtotal|floatformat:2 }} USD
+Tax: ${{ order.tax|floatformat:2 }} USD
+Grand Total: ${{ order.order_total|floatformat:2 }} USD
+
+Thank you for shopping with us!
+
+{% endautoescape %}

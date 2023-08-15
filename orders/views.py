@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from shop_app.models import Product
 from django.contrib import messages
 import json
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 class PaymentsView(View):
@@ -54,6 +56,8 @@ class PaymentsView(View):
 
         # Clear cart
         CartItem.objects.filter(cart__user=request.user).delete()
+
+
 
         # Send order number and transaction id back to sendData method via JsonResponse
         data = {
@@ -139,13 +143,23 @@ class OrderCompleteView(View):
 
             payment = Payment.objects.get(payment_id=transID)
 
+            subject = 'Thank you for your order!'
+            message = render_to_string('orders/order_received_email.html', {
+                'user': request.user,
+                'order': order,
+                'ordered_products': ordered_products,
+                'subtotal': subtotal,
+            })
+            to_email = request.user.email
+            send_email = EmailMessage(subject, message, to=[to_email])
+            send_email.send()
+            print(subtotal)
             context = {
                 'order': order,
                 'ordered_products': ordered_products,
                 'order_number': order.order_number,
                 'transID': payment.payment_id,
                 'payment': payment,
-                'subtotal': subtotal,
             }
             return render(request, 'orders/order_complete.html', context)
         except (Payment.DoesNotExist, Order.DoesNotExist):

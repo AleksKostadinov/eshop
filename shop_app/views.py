@@ -59,21 +59,84 @@ class HomeListView(CategoryGenderBaseView, ListView):
         return context
 
 
+# class ShopListView(CategoryGenderBaseView, ListView):
+#     template_name = 'shop_app/shop.html'
+#     model = Product
+
+
+#     def get_queryset(self):
+#         sort_param = self.request.GET.get('sort', 'latest')  # Default to sorting by latest
+#         queryset = Product.objects.all()
+
+#         if sort_param == 'latest':
+#             queryset = queryset.order_by('-created_at')
+#         elif sort_param == 'reviews':
+#             queryset = queryset.annotate(review_count=Count('reviewrating')).order_by('-review_count')
+#         elif sort_param == 'rating':
+#             queryset = queryset.annotate(average_rating=Avg('reviewrating__rating')).order_by('-average_rating')
+#         return queryset
+
+
 class ShopListView(CategoryGenderBaseView, ListView):
     template_name = 'shop_app/shop.html'
     model = Product
 
     def get_queryset(self):
-        sort_param = self.request.GET.get('sort', 'latest')  # Default to sorting by latest
-        queryset = Product.objects.all()
+        queryset = super().get_queryset()
 
-        if sort_param == 'latest':
+        # Get filter parameters from the request
+        price_filter = self.request.GET.get('price')
+        color_filter = self.request.GET.get('color')
+        size_filter = self.request.GET.get('size')
+        sort_filter = self.request.GET.get('sort')
+
+        # Apply filters based on selected options
+        if price_filter:
+            if price_filter == 'price-1':
+                queryset = queryset.filter(discounted_price_db__range=(0, 99.99))
+            elif price_filter == 'price-2':
+                queryset = queryset.filter(discounted_price_db__range=(100, 199.99))
+            elif price_filter == 'price-3':
+                queryset = queryset.filter(discounted_price_db__range=(200, 299.99))
+            elif price_filter == 'price-4':
+                queryset = queryset.filter(discounted_price_db__range=(300, 399.99))
+            elif price_filter == 'price-5':
+                queryset = queryset.filter(discounted_price_db__range=(400, 499.99))
+
+        if color_filter:
+            queryset = queryset.filter(color=color_filter)
+
+        if size_filter:
+            queryset = queryset.filter(size=size_filter)
+
+        # Apply sorting based on selected option
+        if sort_filter == 'latest':
             queryset = queryset.order_by('-created_at')
-        elif sort_param == 'reviews':
+        elif sort_filter == 'reviews':
             queryset = queryset.annotate(review_count=Count('reviewrating')).order_by('-review_count')
-        elif sort_param == 'rating':
+        elif sort_filter == 'rating':
             queryset = queryset.annotate(average_rating=Avg('reviewrating__rating')).order_by('-average_rating')
+
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_products = Product.objects.all()
+
+        # Calculate the counters for each price range
+        price_ranges = [
+            {'label': '$0 - $99.99', 'value': 'price-1', 'count': self.get_queryset().filter(discounted_price_db__range=(0, 99.99)).count()},
+            {'label': '$100 - $199.99', 'value': 'price-2', 'count': self.get_queryset().filter(discounted_price_db__range=(100, 199.99)).count()},
+            {'label': '$200 - $299.99', 'value': 'price-3', 'count': self.get_queryset().filter(discounted_price_db__range=(200, 299.99)).count()},
+            {'label': '$300 - $399.99', 'value': 'price-4', 'count': self.get_queryset().filter(discounted_price_db__range=(300, 399.99)).count()},
+            {'label': '$400 - $499.99', 'value': 'price-5', 'count': self.get_queryset().filter(discounted_price_db__range=(400, 499.99)).count()},
+        ]
+
+        context['price_ranges'] = price_ranges
+        context['all_products'] = all_products
+        # ... other context data ...
+
+        return context
 
 
 class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
@@ -208,3 +271,27 @@ class SubmitReviewView(View):
                 messages.success(request, 'Thank you! Your review has been submitted.')
 
         return redirect(url)
+
+# def filtered_products(request):
+#     selected_ranges = request.GET.getlist('price')
+
+#     price_ranges = {
+#         'price-all': (0, 1000),
+#         'price-1': (0, 100),
+#         'price-2': (100, 200),
+#         'price-3': (200, 300),
+#         'price-4': (300, 400),
+#         'price-5': (400, 500),
+#     }
+
+#     filtered_products = Product.objects.all()
+
+#     for selected_range in selected_ranges:
+#         min_price, max_price = price_ranges[selected_range]
+#         filtered_products = filtered_products.filter(price__gte=min_price, price__lt=max_price)
+
+#     context = {
+#         'filtered_products': filtered_products,
+#     }
+
+#     return render(request, 'shop_app/shop.html', context)

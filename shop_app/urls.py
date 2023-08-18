@@ -17,5 +17,6 @@ urlpatterns = [
     path('contact/', ContactView.as_view(), name='contact'),
     path('search/', ProductSearchView.as_view(), name='product_search'),
     path('submit_review/<int:product_id>/', SubmitReviewView.as_view(), name='submit_review'),
+    # path('filtered_products/', filtered_products, name='filtered_products')
 ]
 

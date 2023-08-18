@@ -2,7 +2,7 @@
     <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
     <form action="{% url 'shop_app:shop' %}" method="get">
         <div class="custom-control custom-radio d-flex align-items-center justify-content-between mb-3">
-            <input type="radio" class="custom-control-input" id="price-all" name="price" value="price-all" {% if not selected_color or selected_price == 'price-all' %}checked{% endif %}>
+            <input type="radio" class="custom-control-input" id="price-all" name="price" value="price-all" {% if not selected_price or selected_price == 'price-all' %}checked{% endif %}>
             <label class="custom-control-label" for="price-all">All Prices</label>
         </div>
         {% for price_range in price_ranges %}

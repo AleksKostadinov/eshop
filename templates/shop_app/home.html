@@ -58,7 +58,7 @@
             >
                 <p class="text-right">{{ gender.product_count }} Products</p>
                 <a
-                    href="{% url 'shop_app:shop_by' gender_slug=gender.slug %}"
+                    href="{% url 'shop_app:shop' gender_slug=gender.slug %}"
                     class="cat-img position-relative overflow-hidden mb-3"
                 >
                     <img
@@ -93,7 +93,7 @@
                         <h1 class="mb-4 font-weight-semi-bold">
                             {{ collection.collection_name }}
                         </h1>
-                        <a href="{% url 'shop_app:shop_by' collection_slug=collection.slug %}" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+                        <a href="{% url 'shop_app:shop' collection_slug=collection.slug %}" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,15 @@
+<div class="col-12 pb-1">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="dropdown ml-auto">
+            <button class="btn border dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                        Sort by
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
+                <a class="dropdown-item" href="{% url 'shop_app:shop' %}?sort=latest">Latest</a>
+                <a class="dropdown-item" href="{% url 'shop_app:shop' %}?sort=reviews">Reviews</a>
+                <a class="dropdown-item" href="{% url 'shop_app:shop' %}?sort=rating">Best Rating</a>
+            </div>
+        </div>
+    </div>
+</div>

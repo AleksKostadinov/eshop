@@ -21,6 +21,7 @@ def custom_404(request, exception):
 def custom_500(request, exception):
     return render(request, '500.html', status=500)
 
+
 class ProductsMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,66 +30,17 @@ class ProductsMixin:
         return context
 
 
-class CategoryGenderBaseView():
-    template_name = 'shop_app/shop_by.html'
-    context_object_name = 'products'
-    paginate_by = 6
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories = Category.objects.all()
-        genders = Gender.objects.annotate(product_count=Count('product'))
-        collections = Collection.objects.all()
-        context['categories'] = categories
-        context['genders'] = genders
-        context['collections'] = collections
-        return context
-
-
-class HomeListView(CategoryGenderBaseView, ListView):
-    template_name = 'shop_app/home.html'
-    model = Product
-    context_object_name = 'products'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        top_products = Product.objects.top_by_rating()
-        context['top_products'] = top_products
-        context['products_count'] = self.model.objects.count()
-        context['just_arrived'] = self.model.objects.order_by('-created_at')[:4]
-        return context
-
-
-# class ShopListView(CategoryGenderBaseView, ListView):
-#     template_name = 'shop_app/shop.html'
-#     model = Product
-
-
-#     def get_queryset(self):
-#         sort_param = self.request.GET.get('sort', 'latest')  # Default to sorting by latest
-#         queryset = Product.objects.all()
-
-#         if sort_param == 'latest':
-#             queryset = queryset.order_by('-created_at')
-#         elif sort_param == 'reviews':
-#             queryset = queryset.annotate(review_count=Count('reviewrating')).order_by('-review_count')
-#         elif sort_param == 'rating':
-#             queryset = queryset.annotate(average_rating=Avg('reviewrating__rating')).order_by('-average_rating')
-#         return queryset
-
-class ShopListView(CategoryGenderBaseView, ListView):
-    template_name = 'shop_app/shop.html'
-    model = Product
+class ProductFilterMixin:
+    price_ranges = {
+        'price-1': (0, 99.99),
+        'price-2': (100, 199.99),
+        'price-3': (200, 299.99),
+        'price-4': (300, 399.99),
+        'price-5': (400, 499.99),
+    }
 
     def apply_price_filter(self, queryset, price_filter):
-        price_ranges = {
-            'price-1': (0, 99.99),
-            'price-2': (100, 199.99),
-            'price-3': (200, 299.99),
-            'price-4': (300, 399.99),
-            'price-5': (400, 499.99),
-        }
-        price_range = price_ranges.get(price_filter)
+        price_range = self.price_ranges.get(price_filter)
         if price_range:
             queryset = queryset.filter(discounted_price_db__range=price_range)
         return queryset
@@ -152,6 +104,46 @@ class ShopListView(CategoryGenderBaseView, ListView):
             {'label': '$300 - $399.99', 'value': 'price-4'},
             {'label': '$400 - $499.99', 'value': 'price-5'},
         ]
+
+        return context
+
+
+class CategoryGenderBaseView(ProductFilterMixin):
+    template_name = 'shop_app/shop.html'
+    context_object_name = 'products'
+    paginate_by = 6
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Category.objects.all()
+        genders = Gender.objects.annotate(product_count=Count('product'))
+        collections = Collection.objects.all()
+        context['categories'] = categories
+        context['genders'] = genders
+        context['collections'] = collections
+        return context
+
+
+class HomeListView(CategoryGenderBaseView, ListView):
+    template_name = 'shop_app/home.html'
+    model = Product
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        top_products = Product.objects.top_by_rating()
+        context['top_products'] = top_products
+        context['products_count'] = self.model.objects.count()
+        context['just_arrived'] = self.model.objects.order_by('-created_at')[:4]
+        return context
+
+
+class ShopListView(CategoryGenderBaseView, ProductFilterMixin, ListView):
+    template_name = 'shop_app/shop.html'
+    model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
         return context
 
@@ -256,8 +248,8 @@ class ContactView(FormView):
 
 
 # ProductsMixin
-class ProductSearchView(ListView):
-    template_name = 'shop_app/shop_by.html'
+class ProductSearchView(CategoryGenderBaseView, ListView):
+    template_name = 'shop_app/shop.html'
     model = Product
     context_object_name = 'products'
 

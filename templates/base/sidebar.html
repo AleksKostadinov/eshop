@@ -1,0 +1,13 @@
+<div class="col-lg-3 col-md-12">
+    <!-- Price Start -->
+    {% include 'partials/_filter_prices.html' with filter_type="price" available_values=price_ranges selected_filter=selected_price %}
+    <!-- Price End -->
+
+    <!-- Color Start -->
+    {% include 'partials/_filter_colors_sizes.html' with filter_type="color" available_values=available_colors selected_filter=selected_color %}
+    <!-- Color End -->
+
+    <!-- Size Start -->
+    {% include 'partials/_filter_colors_sizes.html' with filter_type="size" available_values=available_sizes selected_filter=selected_size %}
+    <!-- Size End -->
+</div>

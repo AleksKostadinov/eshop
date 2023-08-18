@@ -1,129 +1,24 @@
 {% extends 'base/base.html' %}
 {% load static %}
-
 {% block content %}
-
-    <!-- Page Header Start -->
-    {% comment %} <div class="container-fluid bg-secondary mb-5">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
-            <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
-                <p class="m-0 px-2">-</p>
-                <p class="m-0">Shop</p>
-            </div>
-        </div>
-    </div> {% endcomment %}
-    <!-- Page Header End -->
-
 
     <!-- Shop Start -->
         <div class="container-fluid pt-5">
             <div class="row px-xl-5">
-                <!-- Shop Sidebar Start -->
+
                 <div class="col-lg-3 col-md-12">
-
                     <!-- Price Start -->
+                    {% include 'partials/_filter_prices.html' with filter_type="price" available_values=price_ranges selected_filter=selected_price %}
+                    <!-- Price End -->
 
-                    <div class="border-bottom mb-4 pb-4">
-                        <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
-                        <form action="{% url 'shop_app:shop' %}" method="get">
-                            <div class="custom-control custom-radio d-flex align-items-center justify-content-between mb-3">
-                                <input type="radio" class="custom-control-input" id="price-all" name="price" value="price-all" {% if selected_price == 'price-all' %}checked{% endif %}>
-                                <label class="custom-control-label" for="price-all">All Price</label>
-                                <span class="badge border font-weight-normal">{{ all_products.count }}</span>
-                            </div>
-                            {% for price_range in price_ranges %}
-                                <div class="custom-control custom-radio d-flex align-items-center justify-content-between mb-3">
-                                    <input type="radio" class="custom-control-input" id="{{ price_range.value }}" name="price" value="{{ price_range.value }}" {% if selected_price == price_range.value %}checked{% endif %}>
-                                    <label class="custom-control-label" for="{{ price_range.value }}">{{ price_range.label }}</label>
-                                    <span class="badge border font-weight-normal">{{ price_range.count }}</span>
-                                </div>
-                            {% endfor %}
-                            <button type="submit" class="btn btn-primary">Apply Filter</button>
-                        </form>
-                    </div>
+                    <!-- Color Start -->
+                    {% include 'partials/_filter_colors_sizes.html' with filter_type="color" available_values=available_colors selected_filter=selected_color %}
+                    <!-- Color End -->
 
-                <!-- Price End -->
-
-                <!-- Color Start -->
-                <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
-                    <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
-                    </form>
+                    <!-- Size Start -->
+                    {% include 'partials/_filter_colors_sizes.html' with filter_type="size" available_values=available_sizes selected_filter=selected_size %}
+                    <!-- Size End -->
                 </div>
-                <!-- Color End -->
-
-                <!-- Size Start -->
-                <div class="mb-5">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
-                    <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Size</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-2">
-                            <label class="custom-control-label" for="size-2">S</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-3">
-                            <label class="custom-control-label" for="size-3">M</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-4">
-                            <label class="custom-control-label" for="size-4">L</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="size-5">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
-                    </form>
-                </div>
-                <!-- Size End -->
-            </div>
-            <!-- Shop Sidebar End -->
-
 
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-12">

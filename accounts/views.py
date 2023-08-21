@@ -3,9 +3,10 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import FormView, TemplateView
 from accounts.forms import AccountForm, ChangePasswordForm, RegisterForm, UserProfileForm
-from accounts.models import Account, UserProfile
+from accounts.models import Account, SubscribedUsers, UserProfile
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.validations import clean_first_name, clean_last_name, clean_password, clean_phone_number
@@ -13,6 +14,9 @@ from orders.models import Order, OrderProduct
 from django.contrib.auth import login
 from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView
+from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 
 class CustomLoginView(LoginView):
@@ -198,3 +202,34 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
         context["sub_total"] = sub_total
         return context
 
+
+class SubscribeView(View):
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name', None)
+        email = request.POST.get('email', None)
+
+        if not name or not email:
+                messages.error(request, "You must type a valid name and email to subscribe to the Newsletter")
+                return redirect("/")
+
+        if get_user_model().objects.filter(email=email).first():
+            messages.error(request, f"A registered user with the email {email} already exists. You must login to subscribe or unsubscribe.")
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
+        subscribe_user = SubscribedUsers.objects.filter(email=email).first()
+        if subscribe_user:
+            messages.error(request, f"The email address {email} is already subscribed.")
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            messages.error(request, e.messages[0])
+            return redirect("/")
+
+        subscribe_model_instance = SubscribedUsers()
+        subscribe_model_instance.name = name
+        subscribe_model_instance.email = email
+        subscribe_model_instance.save()
+        messages.success(request, f'The email {email} was successfully subscribed to our newsletter!')
+        return redirect(request.META.get("HTTP_REFERER", "/"))

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Account, UserProfile
+from accounts.models import Account, SubscribedUsers, UserProfile
 from django.contrib.auth.admin import UserAdmin
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -16,5 +16,9 @@ class AccountAdmin(UserAdmin):
     list_filter = ()
     fieldsets = ()
 
+class SubscribedUsersAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_date')
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Account, AccountAdmin)
+admin.site.register(SubscribedUsers, SubscribedUsersAdmin)

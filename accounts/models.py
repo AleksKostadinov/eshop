@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
@@ -38,3 +39,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Account)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+class SubscribedUsers(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True, max_length=100)
+    created_date = models.DateTimeField('Date created', default=timezone.now)
+
+    def __str__(self):
+        return self.email
+

@@ -47,6 +47,18 @@ class Brand(models.Model):
         return self.brand_name
 
 
+class Cover(models.Model):
+    cover_name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    cover_title = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(max_length=100, blank=True, null=True)
+    cover_image = models.ImageField(
+        upload_to='photos/covers/', blank=True, null=True)
+
+    def __str__(self):
+        return self.cover_name
+
+
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True)

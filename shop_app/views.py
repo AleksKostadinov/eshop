@@ -5,7 +5,7 @@ from carts.models import CartItem
 from orders.models import OrderProduct
 from shop_app.admin import Brand
 from shop_app.forms import ContactForm, NewsletterForm, ReviewForm
-from shop_app.models import Collection, Gender, Product, Category, ProductGallery, ReviewRating, Variation
+from shop_app.models import Collection, Cover, Gender, Product, Category, ProductGallery, ReviewRating, Variation
 from django.views.generic import ListView, DetailView, FormView
 from django.urls import reverse_lazy
 from django.db.models import Count
@@ -121,10 +121,12 @@ class CategoryGenderBaseView(ProductFilterMixin):
         genders = Gender.objects.annotate(product_count=Count('product'))
         collections = Collection.objects.all()
         brands = Brand.objects.all()
+        covers = Cover.objects.all()
         context['categories'] = categories
         context['genders'] = genders
         context['collections'] = collections
         context['brands'] = brands
+        context['covers'] = covers
         return context
 
 

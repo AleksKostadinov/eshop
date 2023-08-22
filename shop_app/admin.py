@@ -1,5 +1,8 @@
 from django.contrib import admin
-from shop_app.models import Category, Collection, Gender, Product, ProductGallery, ReviewRating, Variation
+from shop_app.models import (
+    Brand, Category, Collection, Gender,
+    Product, ProductGallery, ReviewRating, Variation
+    )
 import admin_thumbnails
 
 
@@ -17,6 +20,11 @@ class GenderAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('category_name',)}
     list_display = ('category_name', 'description')
+
+
+class BrandAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('brand_name',)}
+    list_display = ('brand_name', 'description')
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -45,3 +53,4 @@ admin.site.register(Variation, VariationAdmin)
 admin.site.register(ReviewRating)
 admin.site.register(ProductGallery)
 admin.site.register(Collection, CollectionAdmin)
+admin.site.register(Brand, BrandAdmin)

@@ -36,6 +36,17 @@ class Category(models.Model):
         return self.category_name
 
 
+class Brand(models.Model):
+    brand_name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    brand_image = models.ImageField(
+        upload_to='photos/brands/', blank=True, null=True)
+
+    def __str__(self):
+        return self.brand_name
+
+
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True)

@@ -3,6 +3,7 @@ from django.views import View
 from accounts.models import SubscribedUsers
 from carts.models import CartItem
 from orders.models import OrderProduct
+from shop_app.admin import Brand
 from shop_app.forms import ContactForm, NewsletterForm, ReviewForm
 from shop_app.models import Collection, Gender, Product, Category, ProductGallery, ReviewRating, Variation
 from django.views.generic import ListView, DetailView, FormView
@@ -119,9 +120,11 @@ class CategoryGenderBaseView(ProductFilterMixin):
         categories = Category.objects.all()
         genders = Gender.objects.annotate(product_count=Count('product'))
         collections = Collection.objects.all()
+        brands = Brand.objects.all()
         context['categories'] = categories
         context['genders'] = genders
         context['collections'] = collections
+        context['brands'] = brands
         return context
 
 

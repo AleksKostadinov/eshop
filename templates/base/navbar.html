@@ -136,10 +136,10 @@
             {% include 'base/alerts.html' %}
             {% if request.path == '/' %}
 
-                <div id="header-carousel" class="carousel slide data-ride="carousel">
+                <div id="header-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for cover in covers %}
-                        <div class="carousel-item active" style="height: 410px;">
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height: 410px;">
                             <img class="img-fluid" src="{{ cover.cover_image.url }}" alt="{{ cover.cover_name }}">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3" style="max-width: 700px;">
@@ -169,4 +169,5 @@
     </div>
 </div>
 <!-- Navbar End -->
+
 {% endblock content %}

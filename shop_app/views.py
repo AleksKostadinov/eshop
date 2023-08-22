@@ -140,7 +140,7 @@ class HomeListView(CategoryGenderBaseView, ListView):
         top_products = Product.objects.top_by_rating()
         context['top_products'] = top_products
         context['products_count'] = self.model.objects.count()
-        context['just_arrived'] = self.model.objects.order_by('-created_at')[:4]
+        context['just_arrived'] = self.model.objects.order_by('-created_at')[:6]
         return context
 
 

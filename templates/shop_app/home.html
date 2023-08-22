@@ -4,8 +4,8 @@
 {% load static %}
 
 <!-- Featured Start -->
-<div class="container-fluid pt-5">
-    <div class="row px-xl-5 pb-3">
+<div class="container-fluid pt-4">
+    <div class="row px-xl-5">
         <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
             <div
                 class="d-flex align-items-center border mb-4"
@@ -48,10 +48,10 @@
 
 <!-- Categories Start -->
 
-<div class="container-fluid pt-5">
-    <div class="row px-xl-5 pb-3">
+<div class="container-fluid">
+    <div class="row px-xl-5 pb-3 justify-content-around">
         {% for gender in genders %}
-        <div class="col-lg-4 col-md-6 pb-1">
+        <div class="col-lg-3 col-md-6 pb-1">
             <div
                 class="cat-item d-flex flex-column border mb-4"
                 style="padding: 30px"
@@ -111,10 +111,10 @@
             <span class="px-2">Top Products</span>
         </h2>
     </div>
-    <div class="row px-xl-5 pb-3">
+    <div class="row px-xl-5 pb-3 justify-content-between">
 
         {% for product in top_products %}
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+        <div class="col-lg-2 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div
                     class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
@@ -165,38 +165,6 @@
 <!-- Products End -->
 
 
-{% comment %}
-<!-- Subscribe Start -->
-<div class="container-fluid bg-secondary my-5">
-    <div class="row justify-content-md-center py-5 px-xl-5">
-        <div class="col-md-6 col-12 py-5">
-            <div class="text-center mb-2 pb-2">
-                <h2 class="section-title px-5 mb-3">
-                    <span class="bg-secondary px-2">Stay Updated</span>
-                </h2>
-                <p>
-                    Amet lorem at rebum amet dolores. Elitr lorem dolor sed amet
-                    diam labore at justo ipsum eirmod duo labore labore.
-                </p>
-            </div>
-            <form action="">
-                <div class="input-group">
-                    <input
-                        type="text"
-                        class="form-control border-white p-4"
-                        placeholder="Email Goes Here"
-                    />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary px-4">Subscribe</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Subscribe End --> {% endcomment %}
-
-
 <!-- Products Start -->
 <div class="container-fluid pt-5">
     <div class="text-center mb-4">
@@ -204,9 +172,9 @@
             <span class="px-2">Just Arrived</span>
         </h2>
     </div>
-    <div class="row px-xl-5 pb-3">
+    <div class="row px-xl-5 pb-3 justify-content-between">
         {% for product in just_arrived %}
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+        <div class="col-lg-2 col-md-6 col-sm-12 pb-1">
             <div class="card product-item border-0 mb-4">
                 <div
                     class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"

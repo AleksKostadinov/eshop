@@ -11,4 +11,4 @@ class VariationManager(models.Manager):
 
 class ProductManager(models.Manager):
     def top_by_rating(self):
-        return self.annotate(avg_rating=Avg('reviewrating__rating')).order_by('-avg_rating')[:4]
+        return self.annotate(avg_rating=Avg('reviewrating__rating')).order_by('-avg_rating')[:6]

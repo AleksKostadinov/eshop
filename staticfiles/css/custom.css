@@ -66,17 +66,17 @@
 
   /* Click and hover */
   input:checked ~ label, label:hover ~ label{
-    color: #ffb503;
+    color: #0325ff99;
   }
 
   /* hover hightlight */
   input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
   label:hover ~ input:checked ~ label{
-    color: #cc9000;
+    color: #0325ff;
   }
 
   .rating-star i{
-    color: #ffb503 !important;
+    color: #0325ff99 !important;
   }
 
   ul.thumb{
@@ -141,17 +141,17 @@
 
 /* Click and hover */
 input:checked ~ label, label:hover ~ label{
-  color: #ffb503;
+  color: #0325ff99;
 }
 
 /* hover hightlight */
 input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label{
-  color: #cc9000;
+  color: #0325ff;
 }
 
 .rating-star i{
-  color: #ffb503 !important;
+  color: #0325ff99 !important;
 }
 
 ul.thumb{
@@ -168,3 +168,19 @@ ul.thumb li img{
   height: 80px;
   border: 1px solid grey;
 }
+
+.container .box {
+  margin: 25px;
+  padding: auto;
+  display:table;
+}
+.container .box .box-row {
+  display:table-row;
+}
+.container .box .box-cell {
+  display:table-cell;
+  width:25%;
+  padding:10px;
+  text-align: center;
+}
+

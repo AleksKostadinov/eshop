@@ -115,7 +115,7 @@ $(document).ready(function () {
 
 setTimeout(function () {
     $('#message').fadeOut('slow')
-}, 2500)
+}, 5500)
 
 
 $(document).ready(function(){

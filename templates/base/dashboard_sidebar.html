@@ -8,5 +8,27 @@
     </ul>
     <!--   SIDEBAR .//END   -->
     <br>
+
+    {% if is_subscribed %}
+      <form method="post" action="{% url 'accounts:unsubscribe' %}">
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ user.email }}">
+          <button class="btn btn-primary btn-block" type="submit">
+              <i class="fa fa-toggle-off" aria-hidden="true"></i>
+              <span class="text">Unsubscribe</span>
+          </button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'accounts:subscribe' %}">
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ user.email }}">
+          <button class="btn btn-info btn-block" type="submit">
+              <i class="fa fa-toggle-on" aria-hidden="true"></i>
+              <span class="text">Subscribe</span>
+          </button>
+      </form>
+    {% endif %}
+
+      <br>
     <a class="btn btn-primary btn-block" href="{% url 'accounts:logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
   </aside>

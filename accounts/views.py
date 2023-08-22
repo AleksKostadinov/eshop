@@ -63,6 +63,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         user=self.request.user
+        user_email = user.email
+        is_subscribed = SubscribedUsers.objects.filter(email=user_email).exists()
+
 
         orders = Order.objects.order_by('-created_at').filter(user=user, is_ordered=True)
         orders_count = orders.count()
@@ -70,6 +73,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['orders'] = orders
         context['orders_count'] = orders_count
         context['userprofile'] = userprofile
+        context['is_subscribed'] = is_subscribed
 
         return context
 
@@ -205,18 +209,18 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
 class SubscribeView(View):
     def post(self, request, *args, **kwargs):
-        name = request.POST.get('name', None)
         email = request.POST.get('email', None)
 
-        if not name or not email:
-                messages.error(request, "You must type a valid name and email to subscribe to the Newsletter")
-                return redirect("/")
+        if not email:
+            messages.error(request, "You must type a valid name and email to subscribe to the Newsletter")
+            return redirect("/")
 
-        if get_user_model().objects.filter(email=email).first():
-            messages.error(request, f"A registered user with the email {email} already exists. You must login to subscribe or unsubscribe.")
-            return redirect(request.META.get("HTTP_REFERER", "/"))
+        # if get_user_model().objects.filter(email=email).first():
+        #     messages.error(request, f"A registered user with the email {email} already exists.")
+        #     return redirect(request.META.get("HTTP_REFERER", "/"))
 
         subscribe_user = SubscribedUsers.objects.filter(email=email).first()
+
         if subscribe_user:
             messages.error(request, f"The email address {email} is already subscribed.")
             return redirect(request.META.get("HTTP_REFERER", "/"))
@@ -228,8 +232,25 @@ class SubscribeView(View):
             return redirect("/")
 
         subscribe_model_instance = SubscribedUsers()
-        subscribe_model_instance.name = name
         subscribe_model_instance.email = email
         subscribe_model_instance.save()
         messages.success(request, f'The email {email} was successfully subscribed to our newsletter!')
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+class UnsubscribeView(View):
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email', None)
+
+        if not email:
+            messages.error(request, "You must provide a valid email to unsubscribe from the Newsletter")
+            return redirect("/")
+
+        subscribe_user = SubscribedUsers.objects.filter(email=email).first()
+        if not subscribe_user:
+            messages.error(request, f"The email address {email} is not subscribed.")
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
+        subscribe_user.delete()
+        messages.success(request, f'The email {email} was successfully unsubscribed from our newsletter.')
         return redirect(request.META.get("HTTP_REFERER", "/"))

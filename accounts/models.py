@@ -46,6 +46,9 @@ class SubscribedUsers(models.Model):
     email = models.EmailField(unique=True, max_length=100)
     created_date = models.DateTimeField('Date created', default=timezone.now)
 
+    class Meta:
+        verbose_name_plural = 'Subscribed users'
+
     def __str__(self):
         return self.email
 

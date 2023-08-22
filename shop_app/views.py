@@ -1,10 +1,9 @@
-from typing import Any
-from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
+from accounts.models import SubscribedUsers
 from carts.models import CartItem
 from orders.models import OrderProduct
-from shop_app.forms import ContactForm, ReviewForm
+from shop_app.forms import ContactForm, NewsletterForm, ReviewForm
 from shop_app.models import Collection, Gender, Product, Category, ProductGallery, ReviewRating, Variation
 from django.views.generic import ListView, DetailView, FormView
 from django.urls import reverse_lazy
@@ -12,7 +11,9 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Avg, Count, F
+from django.core.mail import EmailMessage
+from django.db.models import Avg, Count
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def custom_404(request, exception):
@@ -281,26 +282,38 @@ class SubmitReviewView(View):
 
         return redirect(url)
 
-# def filtered_products(request):
-#     selected_ranges = request.GET.getlist('price')
 
-#     price_ranges = {
-#         'price-all': (0, 1000),
-#         'price-1': (0, 100),
-#         'price-2': (100, 200),
-#         'price-3': (200, 300),
-#         'price-4': (300, 400),
-#         'price-5': (400, 500),
-#     }
+class NewsletterView(UserPassesTestMixin, View):
+    def test_func(self):
+        user = self.request.user
+        return user.is_staff
 
-#     filtered_products = Product.objects.all()
+    def get(self, request):
+        form = NewsletterForm()
+        form.fields['receivers'].initial = ', '.join([active.email for active in SubscribedUsers.objects.all()])
+        context = {
+            'form': form,
+            }
 
-#     for selected_range in selected_ranges:
-#         min_price, max_price = price_ranges[selected_range]
-#         filtered_products = filtered_products.filter(price__gte=min_price, price__lt=max_price)
+        return render(request, 'base/newsletter.html', context)
 
-#     context = {
-#         'filtered_products': filtered_products,
-#     }
+    def post(self, request):
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data.get('subject')
+            receivers = form.cleaned_data.get('receivers').split(',')
+            email_message = form.cleaned_data.get('message')
 
-#     return render(request, 'shop_app/shop.html', context)
+            mail = EmailMessage(subject, email_message, f"EShop <{request.user.email}>", bcc=receivers)
+
+            mail.content_subtype = 'html'
+
+            if mail.send():
+                messages.success(request, "Email sent successfully")
+            else:
+                messages.error(request, "There was an error sending the email")
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
+        return redirect('/')

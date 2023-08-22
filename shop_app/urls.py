@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (HomeListView, ShopListView, ContactView,
                     ProductDetailView, GenderListView, CategoryListView,
                     CategoryGenderListView, ProductSearchView, SubmitReviewView,
-                    CollectionListView)
+                    CollectionListView, NewsletterView)
 
 app_name = 'shop_app'
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('contact/', ContactView.as_view(), name='contact'),
     path('search/', ProductSearchView.as_view(), name='product_search'),
     path('submit_review/<int:product_id>/', SubmitReviewView.as_view(), name='submit_review'),
+    path('newsletter/', NewsletterView.as_view(), name='newsletter'),
 ]
 

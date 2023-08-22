@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'accounts',
     'carts',
     'orders',
+    'tinymce',
+    'crispy_forms',
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
@@ -156,3 +159,8 @@ SESSION_EXPIRE_SECONDS = 3600
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 SESSION_TIMEOUT_REDIRECT= '/accounts/login/'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+

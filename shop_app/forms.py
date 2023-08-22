@@ -1,7 +1,7 @@
 from django import forms
 from django.core import validators
-
 from shop_app.models import ReviewRating
+from tinymce.widgets import TinyMCE
 
 
 class ContactForm(forms.Form):
@@ -28,6 +28,13 @@ class ContactForm(forms.Form):
             )
 
 class ReviewForm(forms.ModelForm):
+
     class Meta:
         model = ReviewRating
         fields = ('subject', 'review', 'rating',)
+
+
+class NewsletterForm(forms.Form):
+    subject = forms.CharField()
+    receivers = forms.CharField()
+    message = forms.CharField(widget=TinyMCE(), label="Email content")

@@ -61,11 +61,13 @@
                     href="{% url 'shop_app:shop' gender_slug=gender.slug %}"
                     class="cat-img position-relative overflow-hidden mb-3"
                 >
+                <div class="image-gender-crop-center">
                     <img
                         class="img-fluid"
                         src="{{ gender.gender_image.url }}"
                         alt="gender-image-photo"
                     />
+                </div>
                 </a>
                 <h5 class="font-weight-semi-bold m-0">
                     {{ gender.gender_name }}
@@ -120,11 +122,13 @@
                     class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
                 >
                 <a href="{{ product.get_url }}">
-                    <img
-                        class="img-fluid w-100"
-                        src="{{ product.images.url }}"
-                        alt=""
-                    />
+                    <div class="image-crop-center">
+                        <img
+                            class="img-fluid w-100"
+                            src="{{ product.images.url }}"
+                            alt=""
+                        />
+                    </div>
                 </a>
                 </div>
                 <div
@@ -182,11 +186,10 @@
                     <a
                         href="{{ product.get_url }}"
                     >
-                        <img
-                            class="img-fluid w-100"
-                            src="{{ product.images.url }}"
-                            alt="just-arrived-photo"
-                        />
+                    <div class="image-crop-center">
+                        <img src="{{ product.images.url }}" alt="Product Image">
+                    </div>
+
                     </a>
                 </div>
                 <div

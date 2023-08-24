@@ -154,14 +154,15 @@ label:hover ~ input:checked ~ label{
   color: #0325ff99 !important;
 }
 
-ul.thumb{
-  margin:0 auto;
-  padding: 0;
-  float: left;
-}
-ul.thumb li{
+ul.thumb {
+  display: flex;
+  justify-content: flex-start;
   list-style: none;
-  margin: 10px;
+  padding: 0;
+}
+
+ul.thumb li {
+  margin-right: 10px;
 }
 ul.thumb li img{
   width: 80px;
@@ -182,5 +183,36 @@ ul.thumb li img{
   width:25%;
   padding:10px;
   text-align: center;
+}
+
+.image-crop-center {
+  width: 326px;
+  height: 326px;
+  overflow: hidden;
+}
+
+.image-gender-crop-center {
+  width: 364px;
+  height: 545px;
+  overflow: hidden;
+}
+
+.image-product-crop-center {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+}
+
+.image-thumb-crop-center {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.image-crop-center img, .image-gender-crop-center img,
+.image-product-crop-center img, .image-thumb-crop-center img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 

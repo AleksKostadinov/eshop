@@ -86,37 +86,6 @@ class MyOrdersView(LoginRequiredMixin, TemplateView):
         context['orders'] = orders
         return context
 
-# class EditProfileView(LoginRequiredMixin, TemplateView):
-#     template_name = 'accounts/edit_profile.html'
-
-#     def post(self, request, *args, **kwargs):
-#         userprofile = get_object_or_404(UserProfile, user=request.user)
-#         account_form = AccountForm(request.POST, instance=request.user)
-#         profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
-
-#         if account_form.is_valid() and profile_form.is_valid():
-#             account_form.save()
-#             profile_form.save()
-#             messages.success(request, 'Your profile has been updated.')
-#             return redirect('accounts:edit_profile')
-
-#         context = {
-#             'account_form': account_form,
-#             'profile_form': profile_form,
-#             'userprofile': userprofile,
-#         }
-#         return render(request, self.template_name, context)
-
-#     def get(self, request, *args, **kwargs):
-#         userprofile = get_object_or_404(UserProfile, user=request.user)
-#         account_form = AccountForm(instance=request.user)
-#         profile_form = UserProfileForm(instance=userprofile)
-#         context = {
-#             'account_form': account_form,
-#             'profile_form': profile_form,
-#             'userprofile': userprofile,
-#         }
-#         return render(request, self.template_name, context)
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/edit_profile.html'
@@ -154,6 +123,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 
         return super().form_valid(form)
 
+
 class ChangePasswordView(LoginRequiredMixin, FormView):
     template_name = 'accounts/change_password.html'
     form_class = ChangePasswordForm
@@ -187,6 +157,7 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
             messages.error(self.request, 'Please enter a valid current password.')
 
         return super().form_valid(form)
+
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'accounts/order_detail.html'
@@ -254,3 +225,4 @@ class UnsubscribeView(View):
         subscribe_user.delete()
         messages.success(request, f'The email {email} was successfully unsubscribed from our newsletter.')
         return redirect(request.META.get("HTTP_REFERER", "/"))
+

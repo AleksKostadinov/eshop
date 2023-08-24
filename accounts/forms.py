@@ -5,11 +5,11 @@ from .validations import clean_username, clean_password, clean_phone_number, cle
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Enter Password'}
+        attrs={'class': 'form-control', }
         ), validators=[clean_password])
 
     confirm_password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}
+        attrs={'class': 'form-control', }
         ))
 
     class Meta:
@@ -30,11 +30,11 @@ class RegisterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'Enter Username'
-        self.fields['first_name'].widget.attrs['placeholder'] = 'Enter First Name'
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Enter Last Name'
-        self.fields['email'].widget.attrs['placeholder'] = 'Enter Email'
-        self.fields['phone_number'].widget.attrs['placeholder'] = 'Enter Phone Number'
+        # self.fields['username'].widget.attrs['placeholder'] = 'Enter Username'
+        # self.fields['first_name'].widget.attrs['placeholder'] = 'Enter First Name'
+        # self.fields['last_name'].widget.attrs['placeholder'] = 'Enter Last Name'
+        # self.fields['email'].widget.attrs['placeholder'] = 'Enter Email'
+        # self.fields['phone_number'].widget.attrs['placeholder'] = 'Enter Phone Number'
 
         # Custom validation
         self.fields['username'].validators.append(clean_username)

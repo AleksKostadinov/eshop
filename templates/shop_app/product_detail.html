@@ -36,15 +36,15 @@
                             </div>
                         </a>
                     </li>
-                    <li>
-                        {% for i in product_gallery %}
-                        <a href="{{i.image.url}}" target="mainImage">
-                            <div class="image-thumb-crop-center">
-                                <img src="{{i.image.url}}" alt="Product Image">
-                            </div>
-                        </a>
-                        {% endfor %}
-                    </li>
+                    {% for i in product_gallery %}
+                        <li>
+                            <a href="{{i.image.url}}" target="mainImage">
+                                <div class="image-thumb-crop-center">
+                                    <img src="{{i.image.url}}" alt="Product Image">
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
 

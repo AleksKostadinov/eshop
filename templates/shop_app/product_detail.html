@@ -20,19 +20,34 @@
     <!-- Shop Detail Start -->
     <div class="container-fluid py-5">
         <div class="row px-xl-5">
-                <div class="col-lg-4 pb-5">
-                    <div class="img-big-wrap mainImage">
-                        <center><img src="{{ product.images.url }}"></center>
-                    </div>
-                    <ul class="thumb">
-                        <li>
-                            <a href="{{ product.images.url }}" target="mainImage"><img class="cover" src="{{ product.images.url }}" alt="Product Image"></a>
-                            {% for i in product_gallery %}
-                                <a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="Product Image"></a>
-                            {% endfor %}
-                        </li>
-                    </ul>
+            <div class="col-lg-4 pb-5">
+                <div class="img-big-wrap mainImage">
+                    <center>
+                        <div class="image-product-crop-center">
+                            <img src="{{ product.images.url }}">
+                        </div>
+                    </center>
                 </div>
+                <ul class="thumb">
+                    <li>
+                        <a href="{{ product.images.url }}" target="mainImage">
+                            <div class="image-thumb-crop-center">
+                                <img class="cover" src="{{ product.images.url }}" alt="Product Image">
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        {% for i in product_gallery %}
+                        <a href="{{i.image.url}}" target="mainImage">
+                            <div class="image-thumb-crop-center">
+                                <img src="{{i.image.url}}" alt="Product Image">
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </li>
+                </ul>
+            </div>
+
             <div class="col-lg-7 pb-5">
                 <h3 class="font-weight-semi-bold">{{ product.product_name }}</h3>
                 <div class="d-flex mb-3 rating-star">
@@ -286,9 +301,7 @@
                         <div class="card product-item border-0">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                 <a href="{{ product.get_url }}">
-                                    <div class="image-product-crop-center">
-                                        <img class="img-fluid w-100" src="{{ product.images.url }}" alt="Product Image">
-                                    </div>
+                                    <img class="img-fluid w-100" src="{{ product.images.url }}" alt="Product Image">
                                 </a>
                             </div>
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">

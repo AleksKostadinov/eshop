@@ -39,6 +39,7 @@ class ProductFilterMixin:
         'price-3': (200, 299.99),
         'price-4': (300, 399.99),
         'price-5': (400, 499.99),
+        'price-6': (500, 100000),
     }
 
     def apply_price_filter(self, queryset, price_filter):
@@ -105,6 +106,7 @@ class ProductFilterMixin:
             {'label': '$200 - $299.99', 'value': 'price-3'},
             {'label': '$300 - $399.99', 'value': 'price-4'},
             {'label': '$400 - $499.99', 'value': 'price-5'},
+            {'label': '$500+', 'value': 'price-6'},
         ]
 
         return context
@@ -113,7 +115,7 @@ class ProductFilterMixin:
 class CategoryGenderBaseView(ProductFilterMixin):
     template_name = 'shop_app/shop.html'
     context_object_name = 'products'
-    paginate_by = 6
+    paginate_by = 8
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -257,18 +257,6 @@
                                         <textarea name="review" cols="30" rows="5" class="form-control" required></textarea>
                                     </div>
                                     <br>
-
-                                    {% comment %} <div class="form-group">
-                                        <label for="name">*Your Name:</label>
-                                        <input type="text" class="form-control" id="name" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="email">*Your Email:</label>
-                                        <input type="email" class="form-control" id="email" required>
-                                    </div> {% endcomment %}
-
-
                                     {% if user.is_authenticated %}
 							            {% if orderproduct %}
                                             <input type="submit" value="Leave Your Review" class="btn btn-primary">
@@ -297,33 +285,36 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
-                    {% for product in products %}
-                        <div class="card product-item border-0">
-                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                                <a href="{{ product.get_url }}">
-                                    <img class="img-fluid w-100" src="{{ product.images.url }}" alt="Product Image">
-                                </a>
-                            </div>
-                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                <h6 class="text-truncate mb-3">{{ product.product_name }}</h6>
-                                <div class="d-flex justify-content-center">
-                                        <h6>
-                                            $ {{ product.discounted_price }}
-                                        </h6>
-                                        {% if product.discount_percentage %}
-                                            <h6 class="text-muted ml-2">
-                                                <del>$
-                                                    {{ product.price }}
-                                                </del>
+                    {% for i_product in products %}
+                        {% if i_product != product %}
+                            <div class="card product-item border-0">
+                                <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                    <a href="{{ i_product.get_url }}">
+                                        <div class="image-crop-center">
+                                            <img class="img-fluid w-100" src="{{ i_product.images.url }}" alt="Product Image">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                    <h6 class="text-truncate mb-3">{{ i_product.product_name }}</h6>
+                                    <div class="d-flex justify-content-center">
+                                            <h6>
+                                                $ {{ i_product.discounted_price }}
                                             </h6>
-                                        {% endif %}
+                                            {% if i_product.discount_percentage %}
+                                                <h6 class="text-muted ml-2">
+                                                    <del>$
+                                                        {{ i_product.price }}
+                                                    </del>
+                                                </h6>
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between bg-light border">
+                                    <a href="{{ i_product.get_url }}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                                 </div>
                             </div>
-                            <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{{ product.get_url }}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                {% comment %} <a href="{% url 'carts:add_to_cart' product_id=product.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
-                            </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

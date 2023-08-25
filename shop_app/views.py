@@ -159,6 +159,7 @@ class ShopListView(CategoryGenderBaseView, ProductFilterMixin, ListView):
 class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
     def get(self, request, category_slug, gender_slug, slug):
         product = Product.objects.get(slug=slug)
+        products = Product.objects.filter(gender__slug=gender_slug)
         if request.user.is_authenticated:
             in_cart = CartItem.objects.filter(cart__user=request.user, product=product).exists()
         else:
@@ -179,6 +180,7 @@ class ProductDetailView(ProductsMixin, CategoryGenderBaseView, DetailView):
 
         context = {
             'product': product,
+            'products': products,
             'in_cart': in_cart,
             'orderproduct': orderproduct,
             'reviews': reviews,

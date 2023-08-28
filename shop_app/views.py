@@ -95,10 +95,14 @@ class ProductFilterMixin:
             is_active=True
         ).values_list('variation_value', flat=True).distinct()
 
+
         context['available_sizes'] = Variation.objects.filter(
             variation_category='size',
             is_active=True
         ).values_list('variation_value', flat=True).distinct()
+
+        context['available_colors'] = sorted(context['available_colors'])
+        context['available_sizes'] = sorted(context['available_sizes'])
 
         context['price_ranges'] = [
             {'label': '$0 - $99.99', 'value': 'price-1'},

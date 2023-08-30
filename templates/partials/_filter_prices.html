@@ -1,18 +1,16 @@
 <div class="border-bottom mb-4 pb-4">
     <h5 class="font-weight-semi-bold mb-4">Filter by Price</h5>
     <form action="{% url 'shop_app:shop' %}" method="get">
-        <div class="custom-control custom-radio d-flex align-items-center justify-content-between mb-3">
-            <input type="radio" class="custom-control-input" id="price-all" name="price" value="price-all" {% if not selected_price or selected_price == 'price-all' %}checked{% endif %}>
-            <label class="custom-control-label" for="price-all">All Prices</label>
+        <div class="form-group">
+            <select class="form-select" name="price">
+                <option value="price-all" {% if not selected_price or selected_price == 'price-all' %}selected{% endif %}>All Prices</option>
+                {% for price_range in price_ranges %}
+                    <option value="{{ price_range.value }}" {% if selected_price == price_range.value %}selected{% endif %}>
+                        {{ price_range.label }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
-        {% for price_range in price_ranges %}
-            <div class="custom-control custom-radio d-flex align-items-center justify-content-between mb-3">
-                <input type="radio" class="custom-control-input" id="{{ price_range.value }}" name="price" value="{{ price_range.value }}" {% if selected_price == price_range.value %}checked{% endif %}>
-                <label class="custom-control-label" for="{{ price_range.value }}">
-                    {{ price_range.label }}
-                </label>
-            </div>
-        {% endfor %}
         <button type="submit" class="btn btn-primary">Apply Filter</button>
     </form>
 </div>

@@ -28,32 +28,47 @@
 
     <!-- PayPal Script -->
     <script src="https://www.paypal.com/sdk/js?client-id=AVBSMqNtoZ1IUO6lrSe6-vm9AIV1ZKN8CgXu_nINRs80xELRs650mh3yR62groIUg-GCe59Od_EFOG6O&currency=USD"></script>
+
+    <!-- Custom CSS for sticky footer -->
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        .content-wrapper {
+            min-height: calc(100% - 500px);
+        }
+
+    </style>
 </head>
 
 <body>
+    <div class="content-wrapper">
+        {% include 'base/navbar.html' %}
 
-{% include 'base/navbar.html' %}
+        {% block content %}
 
-{% block content %}
+        {% endblock content %}
+    </div>
 
-{% endblock content %}
+    <div class="footer">
+        {% include 'base/footer.html' %}
+    </div>
 
-{% include 'base/footer.html' %}
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
-    <!-- Contact Javascript File -->
-    <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
-    <script src="{% static 'mail/contact.js' %}"></script>
+        <!-- Contact Javascript File -->
+        <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
+        <script src="{% static 'mail/contact.js' %}"></script>
 
-    <!-- Template Javascript -->
-    <script src="{% static 'js/main.js' %}"></script>
-
+        <!-- Template Javascript -->
+        <script src="{% static 'js/main.js' %}"></script>
 </body>
 
 </html>

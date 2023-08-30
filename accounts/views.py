@@ -1,7 +1,8 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
@@ -14,7 +15,6 @@ from orders.models import Order, OrderProduct
 from django.contrib.auth import login
 from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView
-from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
@@ -22,8 +22,17 @@ from django.core.exceptions import ValidationError
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['user_logged_in'] = request.user.is_authenticated
+        return self.render_to_response(context)
+
     def form_invalid(self, form):
-        messages.error(self.request,'Invalid username or password')
+        if 'email' in form.errors and 'already in use' in form.errors['email'][0].lower():
+            messages.error(self.request, 'This email is already associated with another account.')
+        else:
+            messages.error(self.request, 'Invalid username or password')
+
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -51,7 +60,8 @@ class CustomRegisterView(FormView):
             )
         user.save()
 
-        login(self.request, user)
+        backend = settings.CUSTOM_AUTHENTICATION_BACKEND
+        login(self.request, user, backend=backend)
         messages.success(self.request, 'Registration successful.')
 
         return super().form_valid(form)

@@ -179,7 +179,10 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-SITE_ID = 2
+if DEBUG:
+    SITE_ID = 3
+else:
+    SITE_ID = 2
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
@@ -192,6 +195,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',
     ]
+CUSTOM_AUTHENTICATION_BACKEND = AUTHENTICATION_BACKENDS[0]
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -205,7 +209,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': config('CLIENT_ID'),
             'secret': config('SECRET'),
-            'KEY': config('EMAIL_HOST_USER'),
+            'KEY': config('KEY'),
         }
     }
 }

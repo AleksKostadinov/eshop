@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
@@ -53,12 +53,18 @@ class CustomRegisterView(FormView):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
 
+        # Check if a user with the provided email already exists
+        if Account.objects.filter(email=email).exists():
+            # User with this email already exists, set an error message
+            messages.error(self.request, 'This email is already in use.')
+            return render(self.request, self.template_name, {'form': form})
+
+        # Create the new user
         user = Account.objects.create_user(
             first_name=first_name, last_name=last_name,
             email=email, phone_number=phone_number,
             username=username, password=password
-            )
-        user.save()
+        )
 
         backend = settings.CUSTOM_AUTHENTICATION_BACKEND
         login(self.request, user, backend=backend)

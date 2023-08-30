@@ -197,20 +197,22 @@ AUTHENTICATION_BACKENDS = [
     ]
 CUSTOM_AUTHENTICATION_BACKEND = AUTHENTICATION_BACKENDS[0]
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        'APP': {
-            'client_id': config('CLIENT_ID'),
-            'secret': config('SECRET'),
-            'KEY': config('KEY'),
+
+if not DEBUG:
+    SOCIALACCOUNT_PROVIDERS = {
+        'google': {
+            'SCOPE': [
+                'profile',
+                'email',
+            ],
+            'AUTH_PARAMS': {
+                'access_type': 'online',
+            },
+            'APP': {
+                'client_id': config('CLIENT_ID'),
+                'secret': config('SECRET'),
+                'KEY': config('KEY'),
+            }
         }
     }
-}
 

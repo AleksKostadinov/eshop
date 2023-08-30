@@ -56,10 +56,11 @@
               <label for="phone_number">Phone number</label>
               {{ form.phone_number }}
             </div>
-            <div class="text-center">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
               <button type="submit" class="btn btn-primary">Register</button>
-              <p class="text-center mt-2">Have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+              {{ form.captcha }}
             </div>
+            <p class="text-center mt-2">Have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
             {{ form.errors }}
             {{ form.non_field_errors }}
           </form>

@@ -1,6 +1,9 @@
 from django import forms
 from .models import Account, UserProfile
-from .validations import clean_username, clean_password, clean_phone_number, clean_first_name, clean_last_name
+from .validations import (clean_username, clean_password,
+                          clean_phone_number, clean_first_name, clean_last_name)
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 
 class RegisterForm(forms.ModelForm):
@@ -12,6 +15,8 @@ class RegisterForm(forms.ModelForm):
         attrs={'class': 'form-control', }
         ))
 
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+    
     class Meta:
         model = Account
         fields = ['username', 'first_name', 'last_name', 'email', 'phone_number', 'password']

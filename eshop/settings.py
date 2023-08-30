@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'orders',
     'tinymce',
     'crispy_forms',
-    "crispy_bootstrap4",
+    'crispy_bootstrap4',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.Account"
 LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+RECAPTCHA_PUBLIC_KEY = config('PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = config('PRIVATE_KEY')
 
 #SMTP configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

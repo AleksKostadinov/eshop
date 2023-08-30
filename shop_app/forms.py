@@ -2,6 +2,8 @@ from django import forms
 from django.core import validators
 from shop_app.models import ReviewRating
 from tinymce.widgets import TinyMCE
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 
 class ContactForm(forms.Form):
@@ -26,6 +28,7 @@ class ContactForm(forms.Form):
         widget=forms.HiddenInput,
         validators=[validators.MaxLengthValidator(0)]
             )
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
 class ReviewForm(forms.ModelForm):
 

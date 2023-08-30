@@ -56,17 +56,18 @@
 
         <div class="col-lg-3 col-6 text-right">
             {% if user.is_authenticated %}
-                <a href="" class="btn border">
-                    <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">0</span>
+                <a href="#" class="btn btn-outline-primary border">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge badge-light badge-pill">0</span>
                 </a>
-                <a href="{% url 'carts:carts' %}" class="btn border">
-                    <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">{{ cart_count }}</span>
+                <a href="{% url 'carts:carts' %}" class="btn btn-outline-primary border">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge badge-light badge-pill">
+                        {% if cart_count == 0 %}0{% else %}{{ cart_count }}{% endif %}
+                    </span>
                 </a>
             {% endif %}
         </div>
-
     </div>
 </div>
 <!-- Topbar End -->

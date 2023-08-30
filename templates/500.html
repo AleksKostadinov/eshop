@@ -6,6 +6,10 @@
         <div class="col-md-8 text-center">
             <h1 class="display-4 font-weight-bold mb-4">Oops! Internal Server Error</h1>
             <p class="lead">We're sorry, but something went wrong on our end. Please try again later.</p>
+
+            {% if error_message %}
+                <p class="text-danger">{{ error_message }}</p>
+            {% endif %}
         </div>
     </div>
 </div>

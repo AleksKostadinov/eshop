@@ -6,7 +6,12 @@
         <div class="col-md-8 text-center">
             <h1 class="display-4 font-weight-bold mb-4">Oops! Page Not Found</h1>
             <p class="lead">The requested page could not be found. Please check the URL or try again later.</p>
+
+            {% if error_message %}
+                <p class="text-danger">{{ error_message }}</p>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endblock %}
+

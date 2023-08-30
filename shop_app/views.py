@@ -18,10 +18,13 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def custom_404(request, exception):
-    return render(request, '404.html', status=404)
+    error_message = "Page Not Found"
+    return render(request, '404.html', {'error_message': error_message}, status=404)
+
 
 def custom_500(request, exception):
-    return render(request, '500.html', status=500)
+    error_message = str(exception) if exception else "Internal Server Error"
+    return render(request, '500.html', {'error_message': error_message}, status=500)
 
 
 class ProductsMixin:

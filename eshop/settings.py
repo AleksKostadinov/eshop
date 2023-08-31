@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as messages
-from django.contrib.auth import get_user_model
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -189,19 +188,12 @@ if DEBUG:
 else:
     SITE_ID = 2
 
-def get_account_user_display(request):
-    user = request.user
-    if user.is_authenticated:
-        return user.first_name
-    else:
-        return "Guest"
-
 SOCIALACCOUNT_LOGIN_ON_GET=True
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USER_DISPLAY = get_account_user_display
+ACCOUNT_USER_DISPLAY = lambda user: user.first_name
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 

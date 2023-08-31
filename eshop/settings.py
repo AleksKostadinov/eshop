@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as messages
+from accounts.models import Account
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -127,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Sofia'
 
 USE_I18N = True
 
@@ -189,6 +190,11 @@ else:
     SITE_ID = 2
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USER_DISPLAY = Account.first_name
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (CustomLoginView, CustomRegisterView, CustomLogoutView,
                     DashboardView, MyOrdersView, EditProfileView,
                     ChangePasswordView, OrderDetailView, SubscribeView,
-                    UnsubscribeView)
+                    UnsubscribeView, WishlistAddRemoveView, WishlistView)
 
 app_name = 'accounts'
 
@@ -19,4 +19,6 @@ urlpatterns = [
     path('order_detail/<int:order_number>/', OrderDetailView.as_view(), name='order_detail'),
     path('subscribe/', SubscribeView.as_view(), name='subscribe'),
     path('unsubscribe/', UnsubscribeView.as_view(), name='unsubscribe'),
+    path('wishlist/<int:id>/', WishlistAddRemoveView.as_view(), name='add_remove_wishlist'),
+    path('wishlist/', WishlistView.as_view(), name='wishlist'),
 ]

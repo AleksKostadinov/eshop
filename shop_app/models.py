@@ -76,7 +76,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey('Collection', on_delete=models.SET_NULL, blank=True, null=True)
     additional_discount_percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
+    users_wishlist = models.ManyToManyField(Account, related_name="add_remove_wishlist", blank=True)
 
     class Meta:
         ordering = ['-updated_at']

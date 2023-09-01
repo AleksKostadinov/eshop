@@ -8,7 +8,10 @@
     <meta property="og:image" content="{{ product.images.url }}">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{ product.images.url }}">
+    <meta name="twitter:site" content="@eshopcoco" />
+    <meta name="twitter:title" content="{{ product.product_name }}" />
+    <meta name="twitter:description" content="{{ product.description }}" />
+    <meta name="twitter:image" content="https://eshopcoco.pythonanywhere.com{{ product.images.url }}">
 {% endblock head %}
 
 {% block content %}

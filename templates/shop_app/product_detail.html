@@ -2,6 +2,15 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+{% block head %}
+    <meta property="og:title" content="{{ product.product_name }}">
+    <meta property="og:description" content="{{ product.description }}">
+    <meta property="og:image" content="{{ product.images.url }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ product.images.url }}">
+{% endblock head %}
+
 {% block content %}
     <!-- Page Header Start -->
     {% comment %} <div class="container-fluid bg-secondary mb-5">

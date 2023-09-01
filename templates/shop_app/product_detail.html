@@ -70,7 +70,7 @@
                             <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half {% endif %}" aria-hidden="true"></i>
                             <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half {% endif %}" aria-hidden="true"></i>
                         {% endif %}
-                        {{ product.count_review }} reviews
+                        {{product.count_review}} review{% if product.count_review != 1 %}s{% endif %}
                     </span>
                 </div>
 

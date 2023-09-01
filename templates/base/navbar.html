@@ -135,21 +135,21 @@
                 </div>
             </nav>
             {% include 'base/alerts.html' %}
-            {% if request.path == '/' %}
+            {% if request.path == '/' or request.resolver_match.view_name == 'shop_app:shop' %}
 
                 <div id="header-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for cover in covers %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height: 410px;">
-                            <img class="img-fluid" src="{{ cover.cover_image.url }}" alt="{{ cover.cover_name }}">
-                            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                                <div class="p-3" style="max-width: 700px;">
-                                    <h4 class="text-light text-uppercase font-weight-medium mb-3">{{ cover.description }}</h4>
-                                    <h3 class="display-4 text-white font-weight-semi-bold mb-4">{{ cover.cover_title }}</h3>
-                                    <a href="{% url 'shop_app:shop' %}" class="btn btn-light py-2 px-3">Shop Now</a>
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height: 500px;">
+                                <img class="img-fluid" src="{{ cover.cover_image.url }}" alt="{{ cover.cover_name }}">
+                                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                    <div class="p-3" style="max-width: 700px;">
+                                        <h4 class="text-light text-uppercase font-weight-medium mb-3">{{ cover.description }}</h4>
+                                        <h3 class="display-4 text-white font-weight-semi-bold mb-4">{{ cover.cover_title }}</h3>
+                                        <a href="{% url 'shop_app:shop' %}" class="btn btn-light py-2 px-3">Shop Now</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
 

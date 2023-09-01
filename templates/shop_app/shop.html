@@ -6,12 +6,18 @@
         <div class="container-fluid pt-5">
             <div class="row px-xl-5">
 
-            {% include 'base/sidebar.html' %}
+            {% if '/shop/' == request.path %}
+                {% include 'base/sidebar.html' %}
+            {% endif %}
 
             <!-- Shop Product Start -->
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-9 col-md-12 ml-auto">
                 <div class="row pb-3">
-                    {% include 'base/filter_dropdown.html' %}
+
+                    {% if '/shop/' == request.path %}
+                        {% include 'base/filter_dropdown.html' %}
+                    {% endif %}
+
                     {% for product in products %}
                         <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                             <div class="card product-item border-0 mb-4">

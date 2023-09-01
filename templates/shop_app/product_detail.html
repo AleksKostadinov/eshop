@@ -63,14 +63,17 @@
                 <h3 class="font-weight-semi-bold">{{ product.product_name }}</h3>
                 <div class="d-flex mb-3 rating-star">
                     <span>
-                        <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>
-                        <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half {% endif %}" aria-hidden="true"></i>
-                        <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half {% endif %}" aria-hidden="true"></i>
-                        <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half {% endif %}" aria-hidden="true"></i>
-                        <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half {% endif %}" aria-hidden="true"></i>
+                        {% if product.count_review > 0 %}
+                            <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half {% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half {% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half {% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half {% endif %}" aria-hidden="true"></i>
+                            <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half {% endif %}" aria-hidden="true"></i>
+                        {% endif %}
+                        {{ product.count_review }} reviews
                     </span>
-                    <span> {{product.count_review}} reviews</span>
                 </div>
+
 
 
                 <h3 class="font-weight-semi-bold mb-4">

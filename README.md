@@ -1,8 +1,5 @@
-# EShop
+# EShop - see me [here](https://eshopcoco.pythonanywhere.com/)
 
-https://eshopcoco.pythonanywhere.com/
-
-For username and password use '1'.
 
 FrontEnd: HTML, CSS, Bootstrap and JavaScript.
 

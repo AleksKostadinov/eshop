@@ -3,7 +3,7 @@ from accounts.models import Account
 from shop_app.models import Product, Variation
 
 class ShippingConfig(models.Model):
-    shipping_cost_percent = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    shipping_cost_percent = models.DecimalField(max_digits=10, decimal_places=1, default=0)
 
     def __str__(self):
         return f'Shipping Percent: {self.shipping_cost_percent}'

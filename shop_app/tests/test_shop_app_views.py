@@ -1,12 +1,8 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from accounts.models import Account
-from django.core import mail
 from shop_app.models import Product, Gender, Category
 
-from shop_app.models import ReviewRating
-from accounts.models import SubscribedUsers
-from shop_app.forms import NewsletterForm
 
 class TestShopappViews(TestCase):
     def setUp(self):
@@ -42,6 +38,3 @@ class TestShopappViews(TestCase):
         self.assertTemplateUsed(response, 'shop_app/shop.html')
         self.assertContains(response, 'Test Product 1')
         self.assertNotContains(response, 'Test Product 2')
-
-
-

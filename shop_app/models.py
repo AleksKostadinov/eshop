@@ -70,7 +70,7 @@ class Product(models.Model):
         upload_to='photos/products', blank=True, null=True, default='no-products-found.png')
     quantity = models.IntegerField()
     is_available = models.BooleanField(default=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -124,8 +124,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if self.collection and self.collection_in_season():
             self.additional_discount_percentage = self.collection.additional_discount_percentage
-        # else:
-        #     self.additional_discount_percentage = Decimal('0')
+        else:
+            self.additional_discount_percentage = Decimal('0')
 
         self.discounted_price_db = self.discounted_price
 

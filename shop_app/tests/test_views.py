@@ -1,7 +1,8 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from accounts.models import Account
-from shop_app.models import Product, Gender, Category
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from shop_app.models import Category, Gender, Product
 
 
 class TestShopappViews(TestCase):

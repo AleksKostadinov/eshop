@@ -1,14 +1,12 @@
-from django.test import TestCase
-from django.urls import reverse
 from decimal import Decimal
 from unittest.mock import patch
-from django.utils import timezone
+
 from accounts.models import Account
-from shop_app.models import Category
-from shop_app.models import Gender
-from shop_app.models import Collection
-from shop_app.models import Product
-from shop_app.models import ReviewRating
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from shop_app.models import Category, Collection, Gender, Product, ReviewRating
 
 
 class TestProductModel(TestCase):

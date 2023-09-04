@@ -1,9 +1,8 @@
-from django.contrib import admin
-from shop_app.models import (
-    Brand, Category, Collection, Cover, Gender,
-    Product, ProductGallery, ReviewRating, Variation
-    )
 import admin_thumbnails
+from django.contrib import admin
+
+from shop_app.models import (Brand, Category, Collection, Cover, Gender,
+                             Product, ProductGallery, ReviewRating, Variation)
 
 
 @admin_thumbnails.thumbnail('image')

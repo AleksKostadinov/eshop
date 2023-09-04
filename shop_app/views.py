@@ -1,21 +1,21 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views import View
 from accounts.models import SubscribedUsers
 from carts.models import CartItem
 from core.views_mixins import ProductFilterMixin
-from orders.models import OrderProduct
-from shop_app.admin import Brand
-from shop_app.forms import ContactForm, NewsletterForm, ReviewForm
-from shop_app.models import Collection, Cover, Gender, Product, Category, ProductGallery, ReviewRating, Variation
-from django.views.generic import ListView, DetailView, FormView
-from django.urls import reverse_lazy
-from django.db.models import Count
-from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
-from django.core.mail import EmailMessage
-from django.db.models import Count
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.mail import EmailMessage, send_mail
+from django.db.models import Count
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import DetailView, FormView, ListView
+from orders.models import OrderProduct
+
+from shop_app.admin import Brand
+from shop_app.forms import ContactForm, NewsletterForm, ReviewForm
+from shop_app.models import (Category, Collection, Cover, Gender, Product,
+                             ProductGallery, ReviewRating, Variation)
 
 
 def custom_404(request, exception):

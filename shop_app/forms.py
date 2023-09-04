@@ -1,9 +1,10 @@
-from django import forms
-from django.core import validators
-from shop_app.models import ReviewRating
-from tinymce.widgets import TinyMCE
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from django import forms
+from django.core import validators
+from tinymce.widgets import TinyMCE
+
+from shop_app.models import ReviewRating
 
 
 class ContactForm(forms.Form):

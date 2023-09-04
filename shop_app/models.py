@@ -1,10 +1,12 @@
-from django.db import models
-from django.urls import reverse
-from accounts.models import Account
-from django.db.models import Avg, Count
-from shop_app.managers import ProductManager, VariationManager
-from django.utils import timezone
 from decimal import Decimal
+
+from accounts.models import Account
+from django.db import models
+from django.db.models import Avg, Count
+from django.urls import reverse
+from django.utils import timezone
+
+from shop_app.managers import ProductManager, VariationManager
 
 
 class Gender(models.Model):

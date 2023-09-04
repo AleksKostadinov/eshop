@@ -68,7 +68,7 @@ class Product(models.Model):
     discounted_price_db = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     images = models.ImageField(
         upload_to='photos/products', blank=True, null=True, default='no-products-found.png')
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     gender = models.ForeignKey(Gender, on_delete=models.CASCADE, blank=True, null=True)
@@ -126,6 +126,11 @@ class Product(models.Model):
             self.additional_discount_percentage = self.collection.additional_discount_percentage
         else:
             self.additional_discount_percentage = Decimal('0')
+
+        if self.price is None:
+            self.price = 0
+        if self.discount_percentage is None:
+            self.discount_percentage = 0
 
         self.discounted_price_db = self.discounted_price
 

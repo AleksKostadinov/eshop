@@ -11,7 +11,7 @@ from shop_app.models import Product
 from shop_app.models import ReviewRating
 
 
-class ProductModelTestCase(TestCase):
+class TestProductModel(TestCase):
     def setUp(self):
         self.user = Account.objects.create_user(
             username='testuser', password='testpassword')

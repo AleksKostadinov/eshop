@@ -3,12 +3,12 @@ from accounts.models import Account
 from shop_app.models import Product
 from orders.models import ShippingConfig, Payment, Order, OrderProduct
 
-class ShippingConfigModelTest(TestCase):
+class TestShippingConfigModel(TestCase):
     def test_shipping_config_str(self):
         shipping_config = ShippingConfig.objects.create(shipping_cost_percent=5.0)
         self.assertEqual(str(shipping_config), 'Shipping Percent: 5.0')
 
-class PaymentModelTest(TestCase):
+class TestPaymentModel(TestCase):
     def setUp(self):
         self.user = Account.objects.create_user(
             username='testuser', email='test@example.com', password='testpassword')
@@ -19,7 +19,7 @@ class PaymentModelTest(TestCase):
             amount_paid='50.00', status='Paid')
         self.assertEqual(str(payment), '12345')
 
-class OrderModelTest(TestCase):
+class TestOrderModel(TestCase):
     def setUp(self):
         self.user = Account.objects.create_user(
             username='testuser', email='test@example.com', password='testpassword')
@@ -32,9 +32,8 @@ class OrderModelTest(TestCase):
         self.assertEqual(str(order), 'John')
 
 
-class OrderProductModelTest(TestCase):
+class TestOrderProductModel(TestCase):
     def setUp(self):
-        # Create necessary objects like Account, Product, etc.
         self.user = Account.objects.create(username='testuser', email='test@example.com', password='testpassword')
         self.product = Product.objects.create(
             product_name='Test Product',
@@ -64,7 +63,7 @@ class OrderProductModelTest(TestCase):
 
     def test_order_product_creation(self):
         order_product = OrderProduct.objects.create(
-            order=self.order,  # Provide the order here
+            order=self.order,
             user=self.user,
             product_name='Test Product',
             product_price=10.00,

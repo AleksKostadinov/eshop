@@ -1,10 +1,12 @@
 from decimal import Decimal
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views import View
+
 from django.contrib import messages
-from orders.models import Order, ShippingConfig
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
+from orders.models import Order, ShippingConfig
 from shop_app.models import Product, Variation
+
 from .models import Cart, CartItem
 
 

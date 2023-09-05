@@ -1,36 +1,25 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import FormView, TemplateView
-from accounts.forms import (
-    AccountForm,
-    ChangePasswordForm,
-    RegisterForm,
-    UserProfileForm,
-)
-from accounts.models import Account, SubscribedUsers, UserProfile
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from accounts.validations import (
-    clean_first_name,
-    clean_last_name,
-    clean_password,
-    clean_phone_number,
-)
-from orders.models import Order, OrderProduct
-from django.contrib.auth import login
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 from django.views.generic.edit import UpdateView
-from django.views.generic import DetailView
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-
+from orders.models import Order, OrderProduct
 from shop_app.models import Product
-from django.views.generic import ListView
+
+from accounts.forms import (AccountForm, ChangePasswordForm, RegisterForm,
+                            UserProfileForm)
+from accounts.models import Account, SubscribedUsers, UserProfile
+from accounts.validations import (clean_first_name, clean_last_name,
+                                  clean_password, clean_phone_number)
 
 
 class CustomLoginView(LoginView):

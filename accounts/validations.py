@@ -1,5 +1,6 @@
 from django import forms
 
+
 # Validation for username
 def clean_username(username):
     if len(username) < 2:

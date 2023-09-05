@@ -1,9 +1,9 @@
+from accounts.models import Account
 from django.test import TestCase
 from django.urls import reverse
-from accounts.models import Account
-from shop_app.models import (Cover, Product, Gender, Category,
-                             Collection, Variation, ReviewRating, ProductGallery)
 from django.utils import timezone
+from shop_app.models import (Category, Collection, Cover, Gender, Product,
+                             ProductGallery, ReviewRating, Variation)
 
 
 class TestGenderModel(TestCase):

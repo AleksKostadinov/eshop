@@ -1,9 +1,10 @@
-from django import forms
-from .models import Account, UserProfile
-from .validations import (clean_username, clean_password,
-                          clean_phone_number, clean_first_name, clean_last_name)
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from django import forms
+
+from .models import Account, UserProfile
+from .validations import (clean_first_name, clean_last_name, clean_password,
+                          clean_phone_number, clean_username)
 
 
 class RegisterForm(forms.ModelForm):

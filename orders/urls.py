@@ -1,5 +1,6 @@
 from django.urls import path
-from orders.views import PlaceOrderView,PaymentsView, OrderCompleteView
+
+from orders.views import OrderCompleteView, PaymentsView, PlaceOrderView
 
 app_name = 'orders'
 

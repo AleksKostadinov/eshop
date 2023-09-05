@@ -1,6 +1,7 @@
-from django.db import models
 from accounts.models import Account
+from django.db import models
 from shop_app.models import Product, Variation
+
 
 class ShippingConfig(models.Model):
     shipping_cost_percent = models.DecimalField(max_digits=10, decimal_places=1, default=0)

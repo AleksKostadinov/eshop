@@ -1,6 +1,8 @@
 from django.contrib import admin
-from accounts.models import Account, SubscribedUsers, UserProfile
 from django.contrib.auth.admin import UserAdmin
+
+from accounts.models import Account, SubscribedUsers, UserProfile
+
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'city', 'state', 'country')

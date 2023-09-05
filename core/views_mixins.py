@@ -1,5 +1,6 @@
-from shop_app.models import Variation
 from django.db.models import Avg, Count
+
+from shop_app.models import Variation
 
 
 class ProductFilterMixin:

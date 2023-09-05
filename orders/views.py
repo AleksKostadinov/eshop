@@ -1,17 +1,19 @@
+import json
 from datetime import date
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views import View
+
 from carts.models import CartItem
 from carts.views import BaseCartView
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import EmailMessage
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.views import View
+from shop_app.models import Product
+
 from orders.forms import OrderForm
 from orders.models import Order, OrderProduct, Payment
-from django.contrib.auth.mixins import LoginRequiredMixin
-from shop_app.models import Product
-from django.contrib import messages
-import json
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
 
 
 class PaymentsView(View):

@@ -1,4 +1,5 @@
-from .models import CartItem, Cart
+from .models import Cart, CartItem
+
 
 def counter(request):
     cart_count = 0

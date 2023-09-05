@@ -1,7 +1,9 @@
-from django.test import TestCase
 from accounts.models import Account
+from django.test import TestCase
 from shop_app.models import Product
-from orders.models import ShippingConfig, Payment, Order, OrderProduct
+
+from orders.models import Order, OrderProduct, Payment, ShippingConfig
+
 
 class TestShippingConfigModel(TestCase):
     def test_shipping_config_str(self):
